@@ -1,0 +1,45 @@
+server:
+  port: 8080
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+  # DataSource
+  datasource:
+    driver-class-name: ${MAIN_POSTGRESQL_DRIVER:org.postgresql.Driver}
+    url: jdbc:postgresql://localhost:${MAIN_POSTGRES_PORT:5433}/${MAIN_POSTGRES_DB:main}
+    username: ${MAIN_POSTGRESQL_USER:dbuserMain}
+    password: ${MAIN_POSTGRESQL_PASSWORD:12345Main}
+  # SQL
+  sql:
+    init:
+      mode: always
+      continue-on-error: false
+      schema-locations: classpath:/DB/DDL/schema.sql
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: update
+  show-sql: true
+  properties:
+    hibernate:
+      format_sql: true
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      default_schema: main
+logging:
+  level:
+    ru:
+      practicum: INFO
+    org:
+      springframework:
+        orm:
+          jpa: INFO
+          TransactionManager: DEBUG
+          transaction: INFO
+          transaction.interceptor: TRACE
+      Zalando:
+        logbook: TRACE
+
+# адрес клиента статистики (по умолчанию — локально запущенный StatServerApp)
+stats-server:
+  url: http://localhost:9090

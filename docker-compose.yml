@@ -1,14 +1,36 @@
 services:
-  stats-server:
+  main-db:
+    image: postgres:16.1
+    container_name: main-db
     ports:
-      - "9090:9090"
+      - "${MAIN_POSTGRESQL_PORT:-5433}:5432"
+    volumes:
+      - ./db/volumes/postgres/${MAIN_POSTGRESQL_DB:-main}:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${MAIN_POSTGRESQL_DB:-main}
+      POSTGRES_USER: ${MAIN_POSTGRESQL_USER:-dbuserMain}
+      POSTGRES_PASSWORD: ${MAIN_POSTGRESQL_PASSWORD:-12345Main}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${MAIN_POSTGRESQL_USER:-dbuserMain} -d ${MAIN_POSTGRESQL_DB:-main}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
 
   stats-db:
     image: postgres:16.1
-
-  ewm-service:
+    container_name: stats-db
     ports:
-      - "8080:8080"
-
-  ewm-db:
-    image: postgres:16.1
+      - "${STATS_POSTGRESQL_PORT:-5432}:5432"
+    volumes:
+      - ./db/volumes/postgres/${STATS_POSTGRESQL_DB:-stats}:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${STATS_POSTGRESQL_DB:-stats}
+      POSTGRES_USER: ${STATS_POSTGRESQL_USER:-dbuserStats}
+      POSTGRES_PASSWORD: ${STATS_POSTGRESQL_PASSWORD:-12345Stats}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${STATS_POSTGRESQL_USER:-sa} -d ${STATS_POSTGRESQL_DB:-stats}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
