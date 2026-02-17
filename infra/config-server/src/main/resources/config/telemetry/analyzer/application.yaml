@@ -1,0 +1,48 @@
+server:
+  port: 0
+  # DataSource
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/telemetry_analyzer
+    username: dbuser
+    password: 12345
+  # SQL
+  sql:
+    init:
+      mode: always
+      continue-on-error: false
+      schema-locations: classpath:/DB/DDL/schema.sql
+      data-locations: classpath:/DB/Init/data.sql
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: none
+  show-sql: true
+  properties:
+    hibernate:
+      format_sql: true
+  # Client gRPC
+grpc:
+  client:
+    hub-router:
+      address: static://localhost:59090
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+  # Topic Snapshot
+analyzer:
+  kafka:
+    consumer-snapshot:
+      host: localhost
+      port: 9092
+      offset: earliest
+      group: snaphot
+      topic: telemetry.snapshots.v1
+    # Topic Hub
+    consumer-hub:
+      host: localhost
+      port: 9092
+      offset: earliest
+      group: hub
+      topic: telemetry.hubs.v1

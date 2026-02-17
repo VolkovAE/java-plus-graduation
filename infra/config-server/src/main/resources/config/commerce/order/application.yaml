@@ -1,0 +1,35 @@
+server:
+  port: 0
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+  # DataSource
+  datasource:
+    driver-class-name: ${COMMERCE_POSTGRESQL_DRIVER:org.postgresql.Driver}
+    url: ${COMMERCE_POSTGRESQL_URL:jdbc:postgresql://localhost:5432/commerce}
+    username: ${COMMERCE_POSTGRESQL_USER:dbuser}
+    password: ${COMMERCE_POSTGRESQL_PASSWORD:12345}
+  # SQL
+  sql:
+    init:
+      mode: always
+      continue-on-error: false
+      schema-locations: classpath:/DB/DDL/schema.sql
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  show-sql: true
+  properties:
+    hibernate:
+      format_sql: true
+      default_schema: order_
+logging:
+  level:
+    ru:
+      practicum:
+        smart: INFO
+    org:
+      Zalando:
+        logbook: TRACE

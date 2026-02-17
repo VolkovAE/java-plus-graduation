@@ -1,0 +1,24 @@
+server:
+  port: 8080
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+logging:
+  level:
+    ru:
+      practicum:
+        smart: INFO
+    org:
+      zalando:
+        logbook: TRACE
+kafka:
+  producer:
+    host: localhost
+    port: 9092
+  topic:
+    sensors: telemetry.sensors.v1
+    hubs: telemetry.hubs.v1
+grpc:
+  server:
+    port: 59091

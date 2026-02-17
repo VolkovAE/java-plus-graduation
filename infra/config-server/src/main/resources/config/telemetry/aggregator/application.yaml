@@ -1,0 +1,27 @@
+server:
+  port: 0
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+logging:
+  level:
+    ru:
+      practicum:
+        smart: INFO
+    org:
+      Zalando:
+        logbook: TRACE
+aggregator:
+  Kafka:
+    consumer:
+      host: localhost
+      port: 9092
+      offset: earliest
+      group: aggregator
+      topic: telemetry.sensors.v1
+    producer:
+      host: localhost
+      port: 9092
+    topic:
+      snapshots: telemetry.snapshots.v1
