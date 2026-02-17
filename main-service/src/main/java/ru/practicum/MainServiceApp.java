@@ -2,10 +2,12 @@ package ru.practicum;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
-public class MainServiceApplication {
+@ConfigurationPropertiesScan
+public class MainServiceApp {
     public static void main(String[] args) {
-        SpringApplication.run(MainServiceApplication.class, args);
+        SpringApplication.run(MainServiceApp.class, args);
     }
 }
