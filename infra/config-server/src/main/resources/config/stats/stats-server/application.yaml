@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 0
 spring:
   output:
     ansi:
@@ -7,7 +7,7 @@ spring:
   # DataSource
   datasource:
     driver-class-name: ${STATS_POSTGRESQL_DRIVER:org.postgresql.Driver}
-    url: jdbc:postgresql://localhost:${STATS_POSTGRES_PORT:5432}/${STATS_POSTGRES_DB:stats}
+    url: ${STATS_POSTGRESQL_URL:jdbc:postgresql://localhost:5432/stats}
     username: ${STATS_POSTGRESQL_USER:dbuserStats}
     password: ${STATS_POSTGRESQL_PASSWORD:12345Stats}
   # SQL

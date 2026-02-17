@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 0
 spring:
   output:
     ansi:
@@ -7,7 +7,7 @@ spring:
   # DataSource
   datasource:
     driver-class-name: ${MAIN_POSTGRESQL_DRIVER:org.postgresql.Driver}
-    url: jdbc:postgresql://localhost:${MAIN_POSTGRES_PORT:5433}/${MAIN_POSTGRES_DB:main}
+    url: ${MAIN_POSTGRESQL_URL:jdbc:postgresql://localhost:5433/main}
     username: ${MAIN_POSTGRESQL_USER:dbuserMain}
     password: ${MAIN_POSTGRESQL_PASSWORD:12345Main}
   # SQL
