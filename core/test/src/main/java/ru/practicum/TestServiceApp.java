@@ -10,8 +10,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @ConfigurationPropertiesScan
 @EnableDiscoveryClient
 @EnableFeignClients
-public class MainServiceApp {
+public class TestServiceApp {
     public static void main(String[] args) {
-        SpringApplication.run(MainServiceApp.class, args);
+        SpringApplication.run(TestServiceApp.class, args);
     }
 }

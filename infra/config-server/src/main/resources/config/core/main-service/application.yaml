@@ -1,6 +1,5 @@
 server:
   port: 0
-spring:
   output:
     ansi:
       enabled: ALWAYS
@@ -39,7 +38,7 @@ logging:
           transaction.interceptor: TRACE
       Zalando:
         logbook: TRACE
-
-# адрес клиента статистики (по умолчанию — локально запущенный StatServerApp)
-stats-server:
-  url: http://localhost:9090
+# когда создаем бин stats-client используем этот параметр для поиска сервиса stats-server
+discovery:
+  services:
+    stats-server-id: stats-server

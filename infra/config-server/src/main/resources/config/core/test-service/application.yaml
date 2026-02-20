@@ -1,0 +1,11 @@
+server:
+  port: 0
+  output:
+    ansi:
+      enabled: ALWAYS
+logging:
+  level:
+    ru:
+      practicum: INFO
+      Zalando:
+        logbook: TRACE

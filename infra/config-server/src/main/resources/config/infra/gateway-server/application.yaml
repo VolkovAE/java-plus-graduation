@@ -3,7 +3,7 @@ server:
 spring:
   cloud:
     gateway:
-      discovery.locator.enabled: true
+      discovery.locator.enabled: false
       routes:
         - id: main_service_categories
           uri: lb://main-service
@@ -51,3 +51,9 @@ spring:
             - Path=/**
           filters:
             - SetStatus=404
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: DEBUG
