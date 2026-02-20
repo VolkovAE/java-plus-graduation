@@ -3,7 +3,7 @@ services:
     image: postgres:16.1
     container_name: main-db
     ports:
-      - "${MAIN_POSTGRESQL_PORT:-5433}:5432"
+      - "${MAIN_POSTGRESQL_PORT:-5434}:5432"
     volumes:
       - ./db/volumes/postgres/${MAIN_POSTGRESQL_DB:-main}:/var/lib/postgresql/data/
     environment:
@@ -21,7 +21,7 @@ services:
     image: postgres:16.1
     container_name: stats-db
     ports:
-      - "${STATS_POSTGRESQL_PORT:-5432}:5432"
+      - "${STATS_POSTGRESQL_PORT:-5433}:5432"
     volumes:
       - ./db/volumes/postgres/${STATS_POSTGRESQL_DB:-stats}:/var/lib/postgresql/data/
     environment:
