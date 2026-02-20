@@ -1,6 +1,7 @@
 package ru.practicum.user;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import ru.practicum.user.model.User;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -26,7 +28,14 @@ public class UserServiceImpl implements UserService {
                     .formatted(newUserRequest.getEmail()));
         }
         User user = UserMapper.toUser(newUserRequest);
-        return UserMapper.toDto(userRepository.save(user));
+
+        log.info("Перед записью пользователя: {}", user);
+
+        User newUser = userRepository.save(user);
+
+        log.info("Записан пользователь: {}", newUser);
+
+        return UserMapper.toDto(newUser);
     }
 
     @Override
