@@ -23,6 +23,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto create(NewUserRequest newUserRequest) {
+        log.info("Перешли в сервис создания пользователя: {}", newUserRequest);
+
         if (userRepository.existsByEmail(newUserRequest.getEmail())) {
             throw new ConflictException("User with email %s already exists."
                     .formatted(newUserRequest.getEmail()));

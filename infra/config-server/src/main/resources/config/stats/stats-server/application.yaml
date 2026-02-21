@@ -7,19 +7,19 @@ spring:
   # DataSource
   datasource:
     driver-class-name: ${STATS_POSTGRESQL_DRIVER:org.postgresql.Driver}
-    url: ${STATS_POSTGRESQL_URL:jdbc:postgresql://localhost:5432/stats}
+    url: ${STATS_POSTGRESQL_URL:jdbc:postgresql://localhost:5433/stats}
     username: ${STATS_POSTGRESQL_USER:dbuserStats}
     password: ${STATS_POSTGRESQL_PASSWORD:12345Stats}
   # SQL
-  sql:
-    init:
-      mode: always
-      continue-on-error: false
-      schema-locations: classpath:/DB/DDL/schema.sql
+#  sql:
+#    init:
+#      mode: always
+#      continue-on-error: false
+#      schema-locations: classpath:/DB/DDL/schema.sql
   # JPA
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   show-sql: true
   properties:
     hibernate:

@@ -1,24 +1,25 @@
 server:
   port: 0
+spring:
   output:
     ansi:
       enabled: ALWAYS
   # DataSource
   datasource:
     driver-class-name: ${MAIN_POSTGRESQL_DRIVER:org.postgresql.Driver}
-    url: ${MAIN_POSTGRESQL_URL:jdbc:postgresql://localhost:5433/main}
+    url: ${MAIN_POSTGRESQL_URL:jdbc:postgresql://localhost:5434/main}
     username: ${MAIN_POSTGRESQL_USER:dbuserMain}
     password: ${MAIN_POSTGRESQL_PASSWORD:12345Main}
   # SQL
-  sql:
-    init:
-      mode: always
-      continue-on-error: false
-      schema-locations: classpath:/DB/DDL/schema.sql
+  #  sql:
+  #    init:
+  #      mode: none # always
+  #      continue-on-error: false
+  #      schema-locations: classpath:/DB/DDL/schema.sql
   # JPA
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
   show-sql: true
   properties:
     hibernate:
