@@ -1,0 +1,45 @@
+server:
+  port: 0
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+  # DataSource
+  datasource:
+    driver-class-name: ${MAIN_POSTGRESQL_DRIVER:org.postgresql.Driver}
+    url: ${MAIN_POSTGRESQL_URL:jdbc:postgresql://localhost:5434/main}
+    username: ${MAIN_POSTGRESQL_USER:dbuserMain}
+    password: ${MAIN_POSTGRESQL_PASSWORD:12345Main}
+  # SQL
+  #  sql:
+  #    init:
+  #      mode: none # always
+  #      continue-on-error: false
+  #      schema-locations: classpath:/DB/DDL/schema.sql
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: update
+  show-sql: true
+  properties:
+    hibernate:
+      format_sql: true
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+#      default_schema: main
+logging:
+  level:
+    ru:
+      practicum: INFO
+    org:
+      springframework:
+        orm:
+          jpa: INFO
+          TransactionManager: DEBUG
+          transaction: INFO
+          transaction.interceptor: TRACE
+      Zalando:
+        logbook: TRACE
+# когда создаем бин stats-client используем этот параметр для поиска сервиса stats-server
+discovery:
+  services:
+    stats-server-id: stats-server

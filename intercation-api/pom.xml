@@ -9,12 +9,6 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>stats</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>intercation-api</artifactId>
 
-    <modules>
-        <module>stats-dto</module>
-        <module>stats-server</module>
-        <module>stats-client</module>
-    </modules>
 </project>
