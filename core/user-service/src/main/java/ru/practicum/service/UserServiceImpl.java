@@ -1,7 +1,7 @@
 package ru.practicum.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +16,15 @@ import ru.practicum.storage.UserRepository;
 
 import java.util.List;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
+@Slf4j
+@Qualifier("UserServiceImpl")
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
+    protected final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDto create(NewUserRequest newUserRequest) {

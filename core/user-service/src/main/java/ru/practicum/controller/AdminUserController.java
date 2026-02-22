@@ -2,8 +2,9 @@ package ru.practicum.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +20,15 @@ import static ru.practicum.util.StringConstants.USER_PATH_USER_ID;
 
 @RestController
 @RequestMapping(USER_BASE_PATH)
-@RequiredArgsConstructor
 @Validated
 @Slf4j
 public class AdminUserController {
     private final UserService userService;
+
+    @Autowired
+    public AdminUserController(@Qualifier("UserServiceImpl") UserService userService) {
+        this.userService = userService;
+    }
 
     // POST /admin/users — добавить нового пользователя
     @PostMapping
