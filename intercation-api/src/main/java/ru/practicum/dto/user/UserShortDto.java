@@ -1,6 +1,8 @@
-package ru.practicum.user.dto;
+package ru.practicum.dto.user;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor

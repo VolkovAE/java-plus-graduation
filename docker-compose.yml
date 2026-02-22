@@ -17,6 +17,24 @@ services:
       retries: 10
     restart: unless-stopped
 
+  users-db:
+    image: postgres:16.1
+    container_name: users-db
+    ports:
+      - "${USERS_POSTGRESQL_PORT:-5435}:5432"
+    volumes:
+      - ./db/volumes/postgres/${USERS_POSTGRESQL_DB:-users}:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${USERS_POSTGRESQL_DB:-users}
+      POSTGRES_USER: ${USERS_POSTGRESQL_USER:-dbuserUsers}
+      POSTGRES_PASSWORD: ${USERS_POSTGRESQL_PASSWORD:-12345Users}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${USERS_POSTGRESQL_USER:-dbuserUsers} -d ${USERS_POSTGRESQL_DB:-users}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
   stats-db:
     image: postgres:16.1
     container_name: stats-db

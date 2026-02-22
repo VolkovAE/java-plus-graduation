@@ -1,18 +1,16 @@
-package ru.practicum.user;
+package ru.practicum.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.user.dto.NewUserRequest;
-import ru.practicum.user.dto.UserDto;
-import ru.practicum.user.dto.UserShortDto;
-import ru.practicum.user.model.User;
+import ru.practicum.dto.user.NewUserRequest;
+import ru.practicum.dto.user.UserDto;
+import ru.practicum.dto.user.UserShortDto;
+import ru.practicum.model.User;
 
 @Component
 public class UserMapper {
-
     public static User toUser(NewUserRequest newUserRequest) {
-        if (newUserRequest == null) {
-            return null;
-        }
+        if (newUserRequest == null) return null;
+
         User user = new User();
         user.setEmail(newUserRequest.getEmail());
         user.setName(newUserRequest.getName());
@@ -20,9 +18,8 @@ public class UserMapper {
     }
 
     public static UserDto toDto(User user) {
-        if (user == null) {
-            return null;
-        }
+        if (user == null) return null;
+
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setEmail(user.getEmail());
@@ -31,13 +28,11 @@ public class UserMapper {
     }
 
     public static UserShortDto toShortDto(User user) {
-        if (user == null) {
-            return null;
-        }
+        if (user == null) return null;
+
         UserShortDto userShortDto = new UserShortDto();
         userShortDto.setId(user.getId());
         userShortDto.setName(user.getName());
         return userShortDto;
     }
 }
-
