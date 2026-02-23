@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.practicum.category.model.Category;
 import ru.practicum.events.model.Event;
-import ru.practicum.user.model.User;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,9 +17,9 @@ public interface EventRepository extends JpaRepository<Event, Integer>, JpaSpeci
     @Query("SELECT e FROM Event e WHERE e.id IN :eventIds")
     Set<Event> findAllById(@Param("eventIds") List<Integer> eventIds);
 
-    List<Event> findByInitiatorOrderByIdAsc(User user);
+    List<Event> findByInitiatorIdOrderByIdAsc(Integer initiatorId);
 
-    Optional<Event> findByInitiatorAndId(User user, Integer eventId);
+    Optional<Event> findByInitiatorIdAndId(Integer initiatorId, Integer eventId);
 
     Collection<Event> findByCategory(Category category);
 

@@ -13,4 +13,6 @@ public final class StringConstants {
     public static final String PATH_BOX_USERS = "/box/users";
     public static final String PATH_BOX_USERS_ID = "/{userId}";
     public static final String PATH_BOX_USERS_LIST = "/list";
+
+    public static final String ERROR_MESSAGE_USER_SERVICE_UNAVAILABLE = "User-service не доступен. Попробуйте попытку получить пользователя позже.";
 }

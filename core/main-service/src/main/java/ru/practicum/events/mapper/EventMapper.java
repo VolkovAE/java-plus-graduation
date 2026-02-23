@@ -3,11 +3,11 @@ package ru.practicum.events.mapper;
 import org.springframework.stereotype.Component;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.model.Category;
+import ru.practicum.dto.user.UserDto;
+import ru.practicum.dto.user.UserShortDto;
 import ru.practicum.events.dto.*;
 import ru.practicum.events.enums.EventState;
 import ru.practicum.events.model.Event;
-import ru.practicum.user.dto.UserShortDto;
-import ru.practicum.user.model.User;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +17,7 @@ public class EventMapper {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public EventFullDto toEventFullDto(Event event) {
+    public EventFullDto toEventFullDto(Event event, UserDto userDto) {
         if (event == null) {
             return null;
         }
@@ -38,8 +38,8 @@ public class EventMapper {
         dto.setEventDate(event.getEventDate().format(formatter)); // Здесь форматирование работает
 
         UserShortDto userShortDto = new UserShortDto();
-        userShortDto.setId(event.getInitiator().getId());
-        userShortDto.setName(event.getInitiator().getName());
+        userShortDto.setId(userDto.getId());
+        userShortDto.setName(userDto.getName());
         dto.setInitiator(userShortDto);
 
         Location location = new Location();
@@ -59,7 +59,7 @@ public class EventMapper {
         return dto;
     }
 
-    public EventShortDto toEventShortDto(Event event) {
+    public EventShortDto toEventShortDto(Event event, UserDto userDto) {
         if (event == null) {
             return null;
         }
@@ -76,8 +76,8 @@ public class EventMapper {
         dto.setConfirmedRequests(event.getConfirmedRequests() != null ? event.getConfirmedRequests() : 0);
         dto.setEventDate(event.getEventDate().format(formatter));
         UserShortDto userShortDto = new UserShortDto();
-        userShortDto.setId(event.getInitiator().getId());
-        userShortDto.setName(event.getInitiator().getName());
+        userShortDto.setId(userDto.getId());
+        userShortDto.setName(userDto.getName());
         dto.setInitiator(userShortDto);
 
         dto.setPaid(event.getPaid());
@@ -87,12 +87,12 @@ public class EventMapper {
         return dto;
     }
 
-    public Event toEventForUpdate(User user, Integer eventId, UpdateEventUserRequest request) {
+    public Event toEventForUpdate(UserDto userDto, Integer eventId, UpdateEventUserRequest request) {
         if (request == null) return null;
 
         Event event = new Event();
         event.setId(eventId);
-        event.setInitiator(user);
+        event.setInitiatorId(userDto.getId());
 
         if (request.getTitle() != null) {
             event.setTitle(request.getTitle());
@@ -123,7 +123,7 @@ public class EventMapper {
         return event;
     }
 
-    public Event toEvent(User user, NewEventDto dto, Category category) {
+    public Event toEvent(UserDto userDto, NewEventDto dto, Category category) {
         if (dto == null) {
             return null;
         }
@@ -138,7 +138,7 @@ public class EventMapper {
         event.setTitle(dto.getTitle());
 
         // связки
-        event.setInitiator(user);
+        event.setInitiatorId(userDto.getId());
         event.setCategory(category);
 
         // координаты
@@ -153,5 +153,4 @@ public class EventMapper {
 
         return event;
     }
-
 }

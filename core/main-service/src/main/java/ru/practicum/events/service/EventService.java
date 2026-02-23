@@ -15,9 +15,9 @@ public interface EventService {
 
     EventFullDto updateEventByAdmin(Integer eventId, UpdateEventAdminRequest dto);
 
-    public EventFullDto add(Integer userId, NewEventDto newEventDto);
+    EventFullDto add(Integer userId, NewEventDto newEventDto);
 
-    public EventFullDto update(Integer userId, Integer eventId, UpdateEventUserRequest updateEventUserRequest);
+    EventFullDto update(Integer userId, Integer eventId, UpdateEventUserRequest updateEventUserRequest);
 
     EventFullDto getPublicEventById(Integer eventId, HttpServletRequest request);
 

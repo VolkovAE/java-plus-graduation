@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import ru.practicum.category.model.Category;
 import ru.practicum.events.enums.EventState;
-import ru.practicum.user.model.User;
 import ru.practicum.validation.FieldDescription;
 
 import java.time.LocalDateTime;
@@ -49,10 +48,9 @@ public class Event {
     @FieldDescription(value = "Дата проведения")
     private LocalDateTime eventDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "initiator_id", nullable = false)
+    @Column(name = "initiator_id", nullable = false)
     @FieldDescription(value = "Пользователь")
-    private User initiator;
+    private Integer initiatorId;
 
     @Column(name = "location_lat")
     @FieldDescription(value = "Д")
