@@ -1,8 +1,8 @@
 package ru.practicum.events.comment.service;
 
 import ru.practicum.events.comment.dto.CommentDto;
-import ru.practicum.events.comment.dto.DeleteCommentDto;
 import ru.practicum.events.comment.dto.CommonCommentDto;
+import ru.practicum.events.comment.dto.DeleteCommentDto;
 
 import java.util.List;
 

@@ -1,6 +1,5 @@
 package ru.practicum.compilations.params;
 
-import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
