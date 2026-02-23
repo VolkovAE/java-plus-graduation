@@ -14,7 +14,6 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-
     Optional<Comment> findByUserIdAndId(Integer userId, Integer commentId);
 
     Page<Comment> findByEventId(Integer eventId, Pageable pageable);
@@ -29,7 +28,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query("SELECT c FROM Comment c " +
             "WHERE (:text IS NULL OR LOWER(CAST(c.text AS string)) LIKE LOWER(CONCAT('%', CAST(:text AS string), '%'))) " +
-            "AND (:userId IS NULL OR c.user.id = :userId) " +
+            "AND (:userId IS NULL OR c.userId = :userId) " +
             "AND (:eventId IS NULL OR c.event.id = :eventId) " +
             "AND c.created >= :rangeStart " +
             "AND c.created <= :rangeEnd")

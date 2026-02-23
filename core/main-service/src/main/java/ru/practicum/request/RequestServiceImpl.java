@@ -3,13 +3,13 @@ package ru.practicum.request;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.handling.exception.NotFoundException;
+import ru.practicum.config.component.UserClientComponent;
+import ru.practicum.dto.user.UserDto;
 import ru.practicum.events.enums.EventState;
 import ru.practicum.events.model.Event;
 import ru.practicum.events.repository.EventRepository;
-import ru.practicum.user.UserRepository;
-import ru.practicum.user.model.User;
 import ru.practicum.handling.exception.ConflictException;
+import ru.practicum.handling.exception.NotFoundException;
 import ru.practicum.request.dto.ParticipationRequestDto;
 
 import java.time.LocalDateTime;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RequestServiceImpl implements RequestService {
-    private final UserRepository userRepository;
+    private final UserClientComponent userRepository;
     private final EventRepository eventRepository;
     private final RequestRepository requestRepository;
     private final RequestMapper requestMapper;
@@ -28,8 +28,8 @@ public class RequestServiceImpl implements RequestService {
     @Override
     @Transactional
     public ParticipationRequestDto createRequest(Integer userId, Integer eventId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("User with id=" + userId + " was not found"));
+        UserDto userDto = userRepository.getUserById(userId);
+
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " was not found"));
 
@@ -38,7 +38,7 @@ public class RequestServiceImpl implements RequestService {
         }
 
         // 2. Проверка, что инициатор события не может подать запрос на участие
-        if (event.getInitiator().getId().equals(userId)) {
+        if (event.getInitiatorId().equals(userId)) {
             throw new ConflictException("Event initiator cannot request participation");
         }
 
@@ -57,7 +57,7 @@ public class RequestServiceImpl implements RequestService {
         Request request = new Request();
         request.setCreated(LocalDateTime.now());
         request.setEvent(event);
-        request.setRequester(user);
+        request.setRequesterId(userDto.getId());
         if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
             request.setStatus(RequestStatus.CONFIRMED);
         } else {
@@ -69,8 +69,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ParticipationRequestDto> getUserRequests(Integer userId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("User with id=" + userId + " was not found"));
+        UserDto userDto = userRepository.getUserById(userId);
 
         List<Request> requests = requestRepository.findByRequesterId(userId);
 

@@ -1,4 +1,5 @@
 package ru.practicum.compilations.service;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -11,9 +12,9 @@ import ru.practicum.compilations.mapper.CompilationMapper;
 import ru.practicum.compilations.model.Compilation;
 import ru.practicum.compilations.params.PublicCompilationsParams;
 import ru.practicum.compilations.repository.CompilationRepository;
-import ru.practicum.handling.exception.NotFoundException;
 import ru.practicum.events.model.Event;
 import ru.practicum.events.repository.EventRepository;
+import ru.practicum.handling.exception.NotFoundException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,11 +25,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class CompilationServiceImpl implements CompilationService {
-
     private final CompilationRepository compilationRepository;
     private final EventRepository eventRepository;
     private final CompilationMapper compilationMapper; // <-- Внедряем компонент
-
 
     @Override
     @Transactional(readOnly = true)

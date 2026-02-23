@@ -7,9 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.config.component.UserClientComponent;
+import ru.practicum.dto.user.UserDto;
 import ru.practicum.events.comment.dto.CommentDto;
-import ru.practicum.events.comment.dto.DeleteCommentDto;
 import ru.practicum.events.comment.dto.CommonCommentDto;
+import ru.practicum.events.comment.dto.DeleteCommentDto;
 import ru.practicum.events.comment.mapper.CommentMapper;
 import ru.practicum.events.comment.model.Comment;
 import ru.practicum.events.comment.repository.CommentRepository;
@@ -19,8 +21,6 @@ import ru.practicum.events.repository.EventRepository;
 import ru.practicum.handling.exception.BadRequestException;
 import ru.practicum.handling.exception.ConflictException;
 import ru.practicum.handling.exception.NotFoundException;
-import ru.practicum.user.UserRepository;
-import ru.practicum.user.model.User;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
+    private final UserClientComponent userRepository;
     private final EventRepository eventRepository;
     private final CommentMapper commentMapper;
 
@@ -43,13 +43,13 @@ public class CommentServiceImpl implements CommentService {
         if (!event.getState().equals(EventState.PUBLISHED))
             throw new ConflictException("Нельзя добавить комментарий если событие не опубликовано");
 
-        User user = getUser(userId);
+        UserDto userDto = getUser(userId);
 
         Comment comment = Comment.builder()
                 .created(LocalDateTime.now())
                 .text(newCommentDto.getText())
                 .event(event)
-                .user(user)
+                .userId(userDto.getId())
                 .build();
 
         return commentMapper.commentToDto(commentRepository.save(comment));
@@ -177,10 +177,8 @@ public class CommentServiceImpl implements CommentService {
         deleteCommentByAdmin(dto);
     }
 
-    private User getUser(Integer userId) {
-        return userRepository.findById(userId).orElseThrow(
-                () -> new NotFoundException("Пользователь с id: " + userId + " не существует")
-        );
+    private UserDto getUser(Integer userId) {
+        return userRepository.getUserById(userId);
     }
 
     private Event getEvent(Integer eventId) {

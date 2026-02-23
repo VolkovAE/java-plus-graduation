@@ -4,7 +4,6 @@ package ru.practicum.request;
 import jakarta.persistence.*;
 import lombok.*;
 import ru.practicum.events.model.Event;
-import ru.practicum.user.model.User;
 
 import java.time.LocalDateTime;
 
@@ -24,9 +23,8 @@ public class Request {
     private Integer id;
 
     // Пользователь, отправивший запрос
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "requester_id", nullable = false)
-    private User requester;
+    @Column(name = "requester_id", nullable = false)
+    private Integer requesterId;
 
     // Событие, на участие в котором сделан запрос
     @ManyToOne(fetch = FetchType.LAZY)

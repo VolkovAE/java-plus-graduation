@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.storage.CategoryRepository;
 import ru.practicum.client.StatClient;
-import ru.practicum.client.user.UserClient;
+import ru.practicum.config.component.UserClientComponent;
 import ru.practicum.dto.user.UserDto;
 import ru.practicum.events.dto.*;
 import ru.practicum.events.enums.EventState;
@@ -41,10 +41,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import static ru.practicum.util.StringConstants.ERROR_MESSAGE_USER_SERVICE_UNAVAILABLE;
 
 
 @Service
@@ -54,7 +51,7 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final EventMapper eventMapper;
-    private final UserClient userRepository;
+    private final UserClientComponent userRepository;
     private final StatClient statClient;
     private final RequestRepository requestRepository;
     private final RequestMapper requestMapper;
@@ -81,7 +78,7 @@ public class EventServiceImpl implements EventService {
         // Получаем просмотры для всех событий (с обработкой ошибок)
         Map<Integer, Integer> viewsMap = getViewsForEvents(eventIds);
 
-        Map<Integer, UserDto> integerUserDtoMap = getUsersByIdsMap(events.getContent());
+        Map<Integer, UserDto> integerUserDtoMap = userRepository.getUsersByIdsMap(events.getContent());
 
         return events.getContent().stream()
                 .map(event -> {
@@ -188,7 +185,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " not found"));
 
-        UserDto userDto = getUserById(event.getInitiatorId());
+        UserDto userDto = userRepository.getUserById(event.getInitiatorId());
 
         if (dto.getCategory() != null) {
             Category category = categoryRepository.findById(dto.getCategory())
@@ -209,7 +206,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " not found"));
 
-        UserDto userDto = getUserById(event.getInitiatorId());
+        UserDto userDto = userRepository.getUserById(event.getInitiatorId());
 
         if (!"PUBLISHED".equalsIgnoreCase(event.getState().name())) {
             throw new NotFoundException("Event with id=" + eventId + " is not published");
@@ -356,7 +353,7 @@ public class EventServiceImpl implements EventService {
             }
         }
 
-        Map<Integer, UserDto> integerUserDtoMap = getUsersByIdsMap(events);
+        Map<Integer, UserDto> integerUserDtoMap = userRepository.getUsersByIdsMap(events);
 
         List<EventShortDto> dtos = events.stream().map(e -> {
             UserDto userDto = integerUserDtoMap.get(e.getInitiatorId());
@@ -681,7 +678,7 @@ public class EventServiceImpl implements EventService {
         Category category = categoryRepository.findById(newEventDto.getCategoryId())
                 .orElseThrow(() -> new NotFoundException("Категория с id = " + newEventDto.getCategoryId() + " не найдена.", log));
 
-        UserDto userDto = getUserById(userId);
+        UserDto userDto = userRepository.getUserById(userId);
 
         Event event = eventMapper.toEvent(userDto, newEventDto, category);
 
@@ -694,7 +691,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto update(Integer userId, Integer eventId, UpdateEventUserRequest updateEventUserRequest) throws NotFoundException, ServiceUnavailableException {
-        UserDto userDto = getUserById(userId);
+        UserDto userDto = userRepository.getUserById(userId);
 
         Event oldEvent = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id = " + eventId + " не найдено.", log));
@@ -756,7 +753,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventShortDto> findAllByUser(Integer userId, int from, int size) {
-        UserDto userDto = getUserById(userId);
+        UserDto userDto = userRepository.getUserById(userId);
 
         List<Event> eventListAll = eventRepository.findByInitiatorIdOrderByIdAsc(userDto.getId());
 
@@ -779,7 +776,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto findByUserAndEvent(Integer userId, Integer eventId) {
-        UserDto userDto = getUserById(userId);
+        UserDto userDto = userRepository.getUserById(userId);
 
         Event event = eventRepository.findByInitiatorIdAndId(userDto.getId(), eventId)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " was not found", log));
@@ -787,38 +784,5 @@ public class EventServiceImpl implements EventService {
         log.info("Получены данные по событию c id = {} у пользователя с id = {}.", eventId, userId);
 
         return eventMapper.toEventFullDto(event, userDto);
-    }
-
-    private UserDto getUserById(Integer userId) {
-        UserDto userDto = userRepository.getUserById(userId);
-
-        if (userDto.getEmail() == null && userDto.getName() == null) throwUserServiceUnavailable();
-
-        return userDto;
-    }
-
-    private List<UserDto> getUsersByIds(List<Integer> ids) {
-        List<UserDto> userDtoList = userRepository.getUsersByIds(ids);
-
-        if (userDtoList.isEmpty())
-            return userDtoList;  // пустой список возвращаем сразу, то есть либо нет ничего, либо параметр ids пуст
-
-        if (userDtoList.getFirst().getEmail() == null && userDtoList.getFirst().getName() == null)
-            throwUserServiceUnavailable();
-
-        return userDtoList;
-    }
-
-    private void throwUserServiceUnavailable() {
-        log.warn(ERROR_MESSAGE_USER_SERVICE_UNAVAILABLE);
-
-        throw new ServiceUnavailableException(ERROR_MESSAGE_USER_SERVICE_UNAVAILABLE);
-    }
-
-    private Map<Integer, UserDto> getUsersByIdsMap(List<Event> events) {
-        List<Integer> idsUsers = events.stream().map(Event::getInitiatorId).toList();
-        List<UserDto> userDtoList = getUsersByIds(idsUsers);
-
-        return userDtoList.stream().collect(Collectors.toMap(UserDto::getId, Function.identity()));
     }
 }
