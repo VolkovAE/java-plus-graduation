@@ -16,7 +16,6 @@ public final class Constants {
     public static final int LENGTH_TITLE_EVENT_MAX = 120;
     public static final int LENGTH_ANNOTATION_EVENT_MIN = 20;
     public static final int LENGTH_ANNOTATION_EVENT_MAX = 2000;
-    public static final String PATTERN_FORMATE_DATE = "yyyy-MM-dd HH:mm:ss";
     public static final String VALUE_SEND_TO_REVIEW = "SEND_TO_REVIEW";
     public static final String VALUE_CANCEL_REVIEW = "CANCEL_REVIEW";
     public static final String REQUEST_PARAM_FROM = "from";

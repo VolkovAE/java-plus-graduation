@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static ru.practicum.util.Constants.PATTERN_FORMATE_DATE;
+import static ru.practicum.util.StringConstants.PATTERN_FORMATE_DATE;
 
 @RestControllerAdvice
 public class ErrorHandlingControllerAdvice {

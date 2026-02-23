@@ -15,4 +15,6 @@ public final class StringConstants {
     public static final String PATH_BOX_USERS_LIST = "/list";
 
     public static final String ERROR_MESSAGE_USER_SERVICE_UNAVAILABLE = "User-service не доступен. Попробуйте попытку получить пользователя позже.";
+
+    public static final String PATTERN_FORMATE_DATE = "yyyy-MM-dd HH:mm:ss";
 }

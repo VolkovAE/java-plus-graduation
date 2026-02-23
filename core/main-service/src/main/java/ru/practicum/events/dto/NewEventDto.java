@@ -13,6 +13,7 @@ import ru.practicum.validation.Marker;
 import java.time.LocalDateTime;
 
 import static ru.practicum.util.Constants.*;
+import static ru.practicum.util.StringConstants.PATTERN_FORMATE_DATE;
 
 @Data
 public class NewEventDto {

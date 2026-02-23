@@ -82,7 +82,7 @@ public class EventServiceImpl implements EventService {
 
         return events.getContent().stream()
                 .map(event -> {
-                    UserDto userDto = integerUserDtoMap.get(event.getId());
+                    UserDto userDto = integerUserDtoMap.get(event.getInitiatorId());
 
                     EventFullDto dto = eventMapper.toEventFullDto(event, userDto);
                     dto.setConfirmedRequests(confirmedRequestsMap.getOrDefault(event.getId(), 0));
@@ -399,7 +399,8 @@ public class EventServiceImpl implements EventService {
 
             // Фильтр по пользователям
             if (params.getUsers() != null && !params.getUsers().isEmpty()) {
-                predicates.add(root.get("initiator").get("id").in(params.getUsers()));
+                //predicates.add(root.get("initiator").get("id").in(params.getUsers()));
+                predicates.add(root.get("initiatorId").in(params.getUsers()));
             }
 
             // Фильтр по состояниям
