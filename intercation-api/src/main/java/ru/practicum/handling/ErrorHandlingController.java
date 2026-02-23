@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 
 import java.time.LocalDateTime;
@@ -39,4 +40,14 @@ public class ErrorHandlingController {
                 null);
     }
 
+    @ExceptionHandler(ConflictException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError onConflictException(ConflictException e) {
+        log.warn("409 {}", e.getMessage());
+
+        return api(HttpStatus.CONFLICT,
+                "For the requested operation the conditions are not met.",
+                e.getMessage(),
+                null);
+    }
 }
