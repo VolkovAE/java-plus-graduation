@@ -9,7 +9,7 @@ import ru.practicum.dto.user.UserDto;
 
 import java.util.List;
 
-import static ru.practicum.util.StringConstants.*;
+import static ru.practicum.util.Constants.*;
 
 @FeignClient(name = NAME_USER_SERVICE, path = PATH_BOX_USERS, fallback = UserClientFallback.class)
 public interface UserClient {

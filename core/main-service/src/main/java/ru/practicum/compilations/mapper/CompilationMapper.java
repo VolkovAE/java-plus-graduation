@@ -6,9 +6,9 @@ import ru.practicum.compilations.dto.CompilationDto;
 import ru.practicum.compilations.dto.NewCompilationDto;
 import ru.practicum.compilations.dto.UpdateCompilationRequest;
 import ru.practicum.compilations.model.Compilation;
-import ru.practicum.config.component.UserClientComponent;
+import ru.practicum.component.UserClientComponent;
+import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.user.UserDto;
-import ru.practicum.events.dto.EventShortDto;
 import ru.practicum.events.mapper.EventMapper;
 import ru.practicum.events.model.Event;
 

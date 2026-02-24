@@ -16,11 +16,16 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.storage.CategoryRepository;
 import ru.practicum.client.StatClient;
-import ru.practicum.config.component.UserClientComponent;
+import ru.practicum.client.request.RequestClient;
+import ru.practicum.component.UserClientComponent;
+import ru.practicum.dto.event.*;
+import ru.practicum.dto.request.EventRequestStatusUpdateResult;
+import ru.practicum.dto.request.ParticipationRequestDto;
+import ru.practicum.dto.request.RequestStatusUpdateRequest;
 import ru.practicum.dto.user.UserDto;
-import ru.practicum.events.dto.*;
-import ru.practicum.events.enums.EventState;
-import ru.practicum.events.enums.EventStateAction;
+import ru.practicum.enums.event.EventState;
+import ru.practicum.enums.event.EventStateAction;
+import ru.practicum.enums.request.RequestStatus;
 import ru.practicum.events.mapper.EventMapper;
 import ru.practicum.events.model.Event;
 import ru.practicum.events.params.AdminEventParams;
@@ -30,12 +35,9 @@ import ru.practicum.exception.NotFoundException;
 import ru.practicum.exception.ServiceUnavailableException;
 import ru.practicum.handling.exception.ConflictException;
 import ru.practicum.handling.exception.ValidationException;
-import ru.practicum.request.*;
-import ru.practicum.request.dto.EventRequestStatusUpdateResult;
-import ru.practicum.request.dto.ParticipationRequestDto;
-import ru.practicum.request.dto.RequestStatusUpdateRequest;
 import ru.practicum.statistics.dto.EndpointHitDto;
 import ru.practicum.statistics.dto.ViewStatsDto;
+import ru.practicum.storage.ConfirmedCount;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -53,11 +55,9 @@ public class EventServiceImpl implements EventService {
     private final EventMapper eventMapper;
     private final UserClientComponent userRepository;
     private final StatClient statClient;
-    private final RequestRepository requestRepository;
-    private final RequestMapper requestMapper;
+    private final RequestClient requestRepository;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final LocalDateTime EPOCH = LocalDateTime.of(1970, 1, 1, 0, 0);
-
 
     @Override
     public List<EventFullDto> search(AdminEventParams params) {
@@ -78,7 +78,8 @@ public class EventServiceImpl implements EventService {
         // Получаем просмотры для всех событий (с обработкой ошибок)
         Map<Integer, Integer> viewsMap = getViewsForEvents(eventIds);
 
-        Map<Integer, UserDto> integerUserDtoMap = userRepository.getUsersByIdsMap(events.getContent());
+        List<Integer> idsUsers = events.getContent().stream().map(Event::getInitiatorId).toList();
+        Map<Integer, UserDto> integerUserDtoMap = userRepository.getUsersByIdsMap(idsUsers);
 
         return events.getContent().stream()
                 .map(event -> {
@@ -288,9 +289,9 @@ public class EventServiceImpl implements EventService {
             }
             if (Boolean.TRUE.equals(params.getOnlyAvailable())) {
                 Subquery<Long> sub = query.subquery(Long.class);
-                Root<Request> rq = sub.from(Request.class);
+                Root<ParticipationRequestDto> rq = sub.from(ParticipationRequestDto.class);
                 sub.select(cb.count(rq));
-                sub.where(cb.equal(rq.get("event").get("id"), root.get("id")),
+                sub.where(cb.equal(rq.get("event"), root.get("id")),
                         cb.equal(rq.get("status"), "CONFIRMED"));
                 predicates.add(cb.or(
                         cb.equal(root.get("participantLimit"), 0),
@@ -353,7 +354,8 @@ public class EventServiceImpl implements EventService {
             }
         }
 
-        Map<Integer, UserDto> integerUserDtoMap = userRepository.getUsersByIdsMap(events);
+        List<Integer> idsUsers = events.stream().map(Event::getInitiatorId).toList();
+        Map<Integer, UserDto> integerUserDtoMap = userRepository.getUsersByIdsMap(idsUsers);
 
         List<EventShortDto> dtos = events.stream().map(e -> {
             UserDto userDto = integerUserDtoMap.get(e.getInitiatorId());
@@ -385,12 +387,7 @@ public class EventServiceImpl implements EventService {
         }
 
         // 2. Получаем все запросы для этого события
-        List<Request> requests = requestRepository.findByEventId(eventId);
-
-        // 3. Маппинг и возврат DTO
-        return requests.stream()
-                .map(requestMapper::toParticipationRequestDto)
-                .collect(Collectors.toList());
+        return requestRepository.findByEventId(eventId);
     }
 
     private Specification<Event> buildAdminSpecification(AdminEventParams params) {
@@ -463,26 +460,26 @@ public class EventServiceImpl implements EventService {
             throw new ValidationException("requestIds must be not empty");
         }
 
-        RequestStatus targetStatus = updateRequest.getStatus();
-        if (targetStatus == null || targetStatus == RequestStatus.PENDING) {
+        ru.practicum.enums.request.RequestStatus targetStatus = updateRequest.getStatus();
+        if (targetStatus == null || targetStatus == ru.practicum.enums.request.RequestStatus.PENDING) {
             throw new ValidationException("Invalid target status");
         }
 
         // 3. Получаем все указанные запросы и проверяем, что они принадлежат событию
-        List<Request> requests = requestRepository.findAllByIdIn(updateRequest.getRequestIds());
+        List<ParticipationRequestDto> requests = requestRepository.findAllByIdIn(updateRequest.getRequestIds());
         if (requests.size() != updateRequest.getRequestIds().size()) {
             throw new NotFoundException("One or more requests not found");
         }
 
-        for (Request r : requests) {
-            if (!r.getEvent().getId().equals(eventId)) {
+        for (ParticipationRequestDto r : requests) {
+            if (!r.getEvent().equals(eventId)) {
                 throw new ConflictException("Request id=" + r.getId() + " does not belong to event id=" + eventId);
             }
         }
 
         // 4. Проверяем бизнес-условия: изменять можно только PENDING-заявки
-        List<Request> nonPending = requests.stream()
-                .filter(r -> r.getStatus() != RequestStatus.PENDING)
+        List<ParticipationRequestDto> nonPending = requests.stream()
+                .filter(r -> !(r.getStatus().equals(RequestStatus.PENDING.toString())))
                 .collect(Collectors.toList());
         if (!nonPending.isEmpty()) {
             throw new ConflictException("Only requests with status PENDING can be changed");
@@ -492,7 +489,7 @@ public class EventServiceImpl implements EventService {
         List<ParticipationRequestDto> rejectedDtos = new ArrayList<>();
 
         // 5. Если хотим подтвердить заявки
-        if (targetStatus == RequestStatus.CONFIRMED) {
+        if (targetStatus == ru.practicum.enums.request.RequestStatus.CONFIRMED) {
             // если лимит = 0 или нет премодерации => подтверждение не требуется
             if (event.getParticipantLimit() == 0 || Boolean.FALSE.equals(event.getRequestModeration())) {
                 return EventRequestStatusUpdateResult.builder()
@@ -510,28 +507,28 @@ public class EventServiceImpl implements EventService {
             }
 
             // сортируем заявки по created ASC
-            List<Request> sorted = requests.stream()
-                    .sorted(Comparator.comparing(Request::getCreated))
+            List<ParticipationRequestDto> sorted = requests.stream()
+                    .sorted(Comparator.comparing(ParticipationRequestDto::getCreated))
                     .collect(Collectors.toList());
 
-            for (Request req : sorted) {
+            for (ParticipationRequestDto req : sorted) {
                 if (confirmedCountNow < limit) {
-                    req.setStatus(RequestStatus.CONFIRMED);
+                    req.setStatus(RequestStatus.CONFIRMED.toString());
                     confirmedCountNow++;
-                    requestRepository.save(req);
-                    confirmedDtos.add(requestMapper.toParticipationRequestDto(req));
+                    requestRepository.update(req);
+                    confirmedDtos.add(req);
                 } else {
-                    req.setStatus(RequestStatus.REJECTED);
-                    requestRepository.save(req);
-                    rejectedDtos.add(requestMapper.toParticipationRequestDto(req));
+                    req.setStatus(RequestStatus.REJECTED.toString());
+                    requestRepository.update(req);
+                    rejectedDtos.add(req);
                 }
             }
-        } else if (targetStatus == RequestStatus.REJECTED) {
+        } else if (targetStatus == ru.practicum.enums.request.RequestStatus.REJECTED) {
             // отклоняем все указанные заявки
-            for (Request req : requests) {
-                req.setStatus(RequestStatus.REJECTED);
-                requestRepository.save(req);
-                rejectedDtos.add(requestMapper.toParticipationRequestDto(req));
+            for (ParticipationRequestDto req : requests) {
+                req.setStatus(RequestStatus.REJECTED.toString());
+                requestRepository.update(req);
+                rejectedDtos.add(req);
             }
         }
 

@@ -11,7 +11,7 @@ import ru.practicum.service.UserServiceExt;
 
 import java.util.List;
 
-import static ru.practicum.util.StringConstants.*;
+import static ru.practicum.util.Constants.*;
 
 @RestController
 @RequestMapping(path = PATH_BOX_USERS)

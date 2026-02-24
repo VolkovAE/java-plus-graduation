@@ -1,12 +1,12 @@
 package ru.practicum.events.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.model.Category;
+import ru.practicum.dto.category.CategoryDto;
+import ru.practicum.dto.event.*;
 import ru.practicum.dto.user.UserDto;
 import ru.practicum.dto.user.UserShortDto;
-import ru.practicum.events.dto.*;
-import ru.practicum.events.enums.EventState;
+import ru.practicum.enums.event.EventState;
 import ru.practicum.events.model.Event;
 
 import java.time.LocalDateTime;

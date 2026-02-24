@@ -15,8 +15,8 @@ import ru.practicum.service.UserService;
 
 import java.util.List;
 
-import static ru.practicum.util.StringConstants.USER_BASE_PATH;
-import static ru.practicum.util.StringConstants.USER_PATH_USER_ID;
+import static ru.practicum.util.Constants.USER_BASE_PATH;
+import static ru.practicum.util.Constants.USER_PATH_USER_ID;
 
 @RestController
 @RequestMapping(USER_BASE_PATH)

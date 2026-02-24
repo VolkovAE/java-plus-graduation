@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static ru.practicum.util.StringConstants.VALUE_DISCOVERY_SERVICES_STATS_SERVER_ID;
+import static ru.practicum.util.Constants.VALUE_DISCOVERY_SERVICES_STATS_SERVER_ID;
 
 @Component
 @Slf4j
