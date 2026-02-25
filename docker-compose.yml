@@ -1,22 +1,4 @@
 services:
-  main-db:
-    image: postgres:16.1
-    container_name: main-db
-    ports:
-      - "${MAIN_POSTGRESQL_PORT:-5434}:5432"
-    volumes:
-      - ./db/volumes/postgres/${MAIN_POSTGRESQL_DB:-main}:/var/lib/postgresql/data/
-    environment:
-      POSTGRES_DB: ${MAIN_POSTGRESQL_DB:-main}
-      POSTGRES_USER: ${MAIN_POSTGRESQL_USER:-dbuserMain}
-      POSTGRES_PASSWORD: ${MAIN_POSTGRESQL_PASSWORD:-12345Main}
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${MAIN_POSTGRESQL_USER:-dbuserMain} -d ${MAIN_POSTGRESQL_DB:-main}" ]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    restart: unless-stopped
-
   users-db:
     image: postgres:16.1
     container_name: users-db
@@ -66,6 +48,24 @@ services:
       POSTGRES_PASSWORD: ${COMMENTS_POSTGRESQL_PASSWORD:-12345Comments}
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${COMMENTS_POSTGRESQL_USER:-dbuserComments} -d ${COMMENTS_POSTGRESQL_DB:-comments}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  events-db:
+    image: postgres:16.1
+    container_name: events-db
+    ports:
+      - "${EVENT_POSTGRESQL_PORT:-5438}:5432"
+    volumes:
+      - ./db/volumes/postgres/${EVENT_POSTGRESQL_DB:-events}:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${EVENT_POSTGRESQL_DB:-events}
+      POSTGRES_USER: ${EVENT_POSTGRESQL_USER:-dbuserEvent}
+      POSTGRES_PASSWORD: ${EVENT_POSTGRESQL_PASSWORD:-12345Event}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${EVENT_POSTGRESQL_USER:-dbuserEvent} -d ${EVENT_POSTGRESQL_DB:-events}" ]
       interval: 5s
       timeout: 5s
       retries: 10

@@ -16,7 +16,7 @@ public final class Constants {
     public static final String PATH_BOX_USERS_ID = "/{userId}";
     public static final String PATH_BOX_USERS_LIST = "/list";
 
-    public static final String NAME_EVENT_SERVICE = "main-service"; //public static final String NAME_EVENT_SERVICE = "event-service";  todo
+    public static final String NAME_EVENT_SERVICE = "event-service";
     public static final String PATH_BOX_EVENTS = "/box/events";
     public static final String PATH_BOX_EVENTS_ID = "/{eventId}";
 

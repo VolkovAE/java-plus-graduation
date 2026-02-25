@@ -1,4 +1,4 @@
-package ru.practicum.handling.exception;
+package ru.practicum.exception;
 
 import org.slf4j.Logger;
 

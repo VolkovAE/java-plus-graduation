@@ -34,7 +34,7 @@ import ru.practicum.events.repository.EventRepository;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.exception.ServiceUnavailableException;
-import ru.practicum.handling.exception.ValidationException;
+import ru.practicum.exception.ValidationException;
 import ru.practicum.statistics.dto.EndpointHitDto;
 import ru.practicum.statistics.dto.ViewStatsDto;
 import ru.practicum.storage.ConfirmedCount;

@@ -1,4 +1,4 @@
-package ru.practicum.events;
+package ru.practicum.events.controller;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;

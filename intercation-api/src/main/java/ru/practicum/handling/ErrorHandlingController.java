@@ -1,12 +1,17 @@
 package ru.practicum.handling;
 
-import lombok.extern.slf4j.Slf4j;
+import jakarta.validation.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.exception.ConflictException;
+import ru.practicum.exception.DuplicatedDataException;
 import ru.practicum.exception.NotFoundException;
+import ru.practicum.exception.ValidationException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,8 +20,9 @@ import java.util.List;
 import static ru.practicum.util.Constants.PATTERN_FORMATE_DATE;
 
 @RestControllerAdvice
-@Slf4j
 public class ErrorHandlingController {
+    private static final Logger log = LoggerFactory.getLogger(ErrorHandlingController.class);
+
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern(PATTERN_FORMATE_DATE);
 
     private ApiError api(HttpStatus status, String reason, String message, List<String> errors) {
@@ -29,6 +35,37 @@ public class ErrorHandlingController {
         );
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError onConstraintValidationException(ConstraintViolationException e) {
+        log.warn("400 {}", e.getMessage());
+        String message = e.getConstraintViolations().stream()
+                .findFirst()
+                .map(fe -> "Field: %s. Error: %s. Value: %s"
+                        .formatted(fe.getPropertyPath().toString(), fe.getMessage(), fe.getInvalidValue()))
+                .orElse("Validation failed");
+        return api(HttpStatus.BAD_REQUEST,
+                "Incorrectly made request.",
+                message,
+                null);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        // проверяем, наличие ошибок при валидации значений в полях объекта
+        log.warn("400 {}", e.getMessage());
+        String message = e.getBindingResult().getFieldErrors().stream()
+                .findFirst()
+                .map(fe -> "Field: %s. Error: %s. Value: %s"
+                        .formatted(fe.getField(), fe.getDefaultMessage(), fe.getRejectedValue()))
+                .orElse("Validation failed");
+        return api(HttpStatus.BAD_REQUEST,
+                "Incorrectly made request.",
+                message,
+                null);
+    }
+
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiError onNotFoundException(NotFoundException e) {
@@ -37,6 +74,29 @@ public class ErrorHandlingController {
         return api(HttpStatus.NOT_FOUND,
                 "The required object was not found.",
                 e.getMessage(),
+                null);
+    }
+
+    @ExceptionHandler(DuplicatedDataException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError onDuplicatedDataException(DuplicatedDataException e) {
+        log.warn("409 {}", e.getMessage());
+
+        return api(HttpStatus.CONFLICT,
+                "Duplication of an object.",
+                e.getMessage(),
+                null);
+    }
+
+
+    @ExceptionHandler(ValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError onValidationException(ValidationException e) {
+        log.warn("400 {}", e.getMessage());
+
+        return api(HttpStatus.BAD_REQUEST,
+                "Incorrectly made request.",
+                e.getMessage(), // Сообщение, например, "Event date cannot be in the past"
                 null);
     }
 
