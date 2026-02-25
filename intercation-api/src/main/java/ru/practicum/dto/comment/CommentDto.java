@@ -1,4 +1,4 @@
-package ru.practicum.events.comment.dto;
+package ru.practicum.dto.comment;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class CommentDto {
     private Integer id;
     private String text;
-    private Integer userid;
-    private Integer eventid;
+    private Integer userId;
+    private Integer eventId;
 }

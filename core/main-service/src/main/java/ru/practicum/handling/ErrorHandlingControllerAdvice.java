@@ -8,9 +8,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.handling.exception.ConflictException;
+import ru.practicum.exception.ConflictException;
+import ru.practicum.exception.NotFoundException;
 import ru.practicum.handling.exception.DuplicatedDataException;
-import ru.practicum.handling.exception.NotFoundException;
 import ru.practicum.handling.exception.ValidationException;
 
 import java.time.LocalDateTime;

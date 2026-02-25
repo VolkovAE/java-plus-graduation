@@ -15,25 +15,25 @@ spring:
           predicates:
             - Path=/admin/compilations/**,/compilations/**
 
-        - id: main_service_comment_admin
-          uri: lb://main-service
-          predicates:
-            - Path=/admin/comments/**
-
-        - id: main_service_comment_private
-          uri: lb://main-service
-          predicates:
-            - Path=/events/{eventId}/users/{userId}/comment,/users/{userId}/comment/**
-
-        - id: main_service_comment_public
-          uri: lb://main-service
-          predicates:
-            - Path=/events/{eventId}/comment,/comment/search
-
         - id: main_service_event
           uri: lb://main-service
           predicates:
             - Path=/events/**,/admin/events/**,/users/{userId}/events/**
+
+        - id: comment_service_admin
+          uri: lb://comment-service
+          predicates:
+            - Path=/admin/comments/**
+
+        - id: comment_service_private
+          uri: lb://comment-service
+          predicates:
+            - Path=/events/{eventId}/users/{userId}/comment,/users/{userId}/comment/**
+
+        - id: comment_service_public
+          uri: lb://comment-service
+          predicates:
+            - Path=/events/{eventId}/comment,/comment/search
 
         - id: request_service
           uri: lb://request-service

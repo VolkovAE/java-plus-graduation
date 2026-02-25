@@ -1,4 +1,4 @@
-package ru.practicum.events.comment.dto;
+package ru.practicum.dto.comment;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;

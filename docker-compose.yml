@@ -53,6 +53,24 @@ services:
       retries: 10
     restart: unless-stopped
 
+  comments-db:
+    image: postgres:16.1
+    container_name: comments-db
+    ports:
+      - "${COMMENTS_POSTGRESQL_PORT:-5437}:5432"
+    volumes:
+      - ./db/volumes/postgres/${COMMENTS_POSTGRESQL_DB:-comments}:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${COMMENTS_POSTGRESQL_DB:-comments}
+      POSTGRES_USER: ${COMMENTS_POSTGRESQL_USER:-dbuserComments}
+      POSTGRES_PASSWORD: ${COMMENTS_POSTGRESQL_PASSWORD:-12345Comments}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${COMMENTS_POSTGRESQL_USER:-dbuserComments} -d ${COMMENTS_POSTGRESQL_DB:-comments}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
   stats-db:
     image: postgres:16.1
     container_name: stats-db

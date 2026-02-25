@@ -1,12 +1,12 @@
-package ru.practicum.events.comment.controller;
+package ru.practicum.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.events.comment.dto.DeleteCommentDto;
-import ru.practicum.events.comment.service.CommentService;
+import ru.practicum.dto.comment.DeleteCommentDto;
+import ru.practicum.service.CommentService;
 
 @RestController
 @RequiredArgsConstructor

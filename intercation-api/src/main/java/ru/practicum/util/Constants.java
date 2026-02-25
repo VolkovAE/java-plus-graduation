@@ -28,6 +28,10 @@ public final class Constants {
     public static final String PATH_BOX_REQUEST_EVENTS_ID = "/{eventId}";
     public static final String PATH_BOX_REQUEST_EVENTS_LIST = "/list";
 
+    public static final String NAME_COMMENT_SERVICE = "comment-service";
+    public static final String PATH_BOX_COMMENTS = "/box/comments";
+    public static final String PATH_BOX_COMMENTS_ID = "/{commentId}";
+
     public static final String ERROR_MESSAGE_USER_SERVICE_UNAVAILABLE = "User-service не доступен. Попробуйте попытку получить пользователя позже.";
     public static final String ERROR_MESSAGE_EVENT_SERVICE_UNAVAILABLE = "Event-service не доступен. Попробуйте попытку получить событие позже.";
 

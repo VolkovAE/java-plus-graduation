@@ -10,7 +10,7 @@ import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.events.params.PublicEventParams;
 import ru.practicum.events.service.EventService;
-import ru.practicum.handling.exception.BadRequestException;
+import ru.practicum.exception.BadRequestException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
