@@ -5,18 +5,18 @@ spring:
     gateway:
       discovery.locator.enabled: false
       routes:
-        - id: main_service_categories
-          uri: lb://main-service
+        - id: event_service_categories
+          uri: lb://event-service
           predicates:
             - Path=/admin/categories/**,/categories/**
 
-        - id: main_service_compilations
-          uri: lb://main-service
+        - id: event_service_compilations
+          uri: lb://event-service
           predicates:
             - Path=/admin/compilations/**,/compilations/**
 
-        - id: main_service_event
-          uri: lb://main-service
+        - id: event_service_event
+          uri: lb://event-service
           predicates:
             - Path=/events/**,/admin/events/**,/users/{userId}/events/**
 
