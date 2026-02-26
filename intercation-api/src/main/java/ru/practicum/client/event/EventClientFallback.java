@@ -12,6 +12,8 @@ public class EventClientFallback implements EventClient {
         EventFullDto eventFullDto = new EventFullDto();
         eventFullDto.setId(null);
 
+        log.error("Сервис event-service не доступен. Метод getEventById возвращает fallback-значение {}.", eventFullDto);
+
         return eventFullDto;
     }
 }

@@ -15,6 +15,8 @@ public class CommentClientFallback implements CommentClient {
         commentDto.setUserId(null);
         commentDto.setEventId(null);
 
+        log.error("Сервис comment-service не доступен. Метод getCommentById возвращает fallback-значение {}.", commentDto);
+
         return commentDto;
     }
 }

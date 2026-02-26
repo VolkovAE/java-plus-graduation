@@ -11,11 +11,15 @@ import java.util.List;
 public class UserClientFallback implements UserClient {
     @Override
     public UserDto getUserById(Integer userId) {
+        log.error("Сервис user-service не доступен. Метод getUserById возвращает fallback-значение.");
+
         return new UserDto(userId, null, null);
     }
 
     @Override
     public List<UserDto> getUsersByIds(List<Integer> ids) {
+        log.error("Сервис user-service не доступен. Метод getUsersByIds возвращает fallback-значение.");
+
         return ids.stream()
                 .map(id -> new UserDto(id, null, null))
                 .toList();
