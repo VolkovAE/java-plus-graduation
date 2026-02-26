@@ -24,7 +24,7 @@ public class RequestControllerBox implements RequestClient {
     private final RequestServiceExt requestService;
 
     @Autowired
-    public RequestControllerBox(@Qualifier("RequestServiceExtImpl") RequestServiceExt requestService) {
+    public RequestControllerBox(RequestServiceExt requestService) {
         this.requestService = requestService;
     }
 
