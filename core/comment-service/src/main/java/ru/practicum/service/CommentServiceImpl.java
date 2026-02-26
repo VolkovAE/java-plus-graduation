@@ -32,8 +32,8 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
-    private final UserClientComponent userRepository;
-    private final EventClientComponent eventRepository;
+    private final UserClientComponent userClientComponent;
+    private final EventClientComponent eventClientComponent;
     private final CommentMapper commentMapper;
 
     @Override
@@ -178,11 +178,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private UserDto getUser(Integer userId) {
-        return userRepository.getUserById(userId);
+        return userClientComponent.getUserById(userId);
     }
 
     private EventFullDto getEvent(Integer eventId) {
-        return eventRepository.getEventById(eventId);
+        return eventClientComponent.getEventById(eventId);
     }
 
     private Comment getCommentByUserId(Integer userId, Integer commentId) {

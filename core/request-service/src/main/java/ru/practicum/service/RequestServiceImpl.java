@@ -23,17 +23,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RequestServiceImpl implements RequestService {
-    private final UserClientComponent userRepository;
-    private final EventClientComponent eventRepository;
+    private final UserClientComponent userClientComponent;
+    private final EventClientComponent eventClientComponent;
     private final RequestRepository requestRepository;
     private final RequestMapper requestMapper;
 
     @Override
     @Transactional
     public ParticipationRequestDto createRequest(Integer userId, Integer eventId) {
-        UserDto userDto = userRepository.getUserById(userId);
+        UserDto userDto = userClientComponent.getUserById(userId);
 
-        EventFullDto eventFullDto = eventRepository.getEventById(eventId);
+        EventFullDto eventFullDto = eventClientComponent.getEventById(eventId);
 
         if (requestRepository.existsByRequesterIdAndEventId(userId, eventId)) {
             throw new ConflictException("Request already exists");
@@ -71,7 +71,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ParticipationRequestDto> getUserRequests(Integer userId) {
-        UserDto userDto = userRepository.getUserById(userId);
+        UserDto userDto = userClientComponent.getUserById(userId);
 
         List<Request> requests = requestRepository.findByRequesterId(userId);
 
