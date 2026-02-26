@@ -1,7 +1,6 @@
 package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.practicum.dto.request.ParticipationRequestDto;
 import ru.practicum.enums.request.RequestStatus;
@@ -18,7 +17,6 @@ import static ru.practicum.util.Constants.FORMATTER;
 
 @Service
 @RequiredArgsConstructor
-@Qualifier("RequestServiceExtImpl")
 public class RequestServiceExtImpl implements RequestServiceExt {
     private final RequestRepository requestRepository;
     private final RequestMapper requestMapper;
