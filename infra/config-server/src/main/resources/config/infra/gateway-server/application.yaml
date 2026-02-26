@@ -9,41 +9,49 @@ spring:
           uri: lb://event-service
           predicates:
             - Path=/admin/categories/**,/categories/**
+            - Method=GET,POST,PATCH,DELETE
 
         - id: event_service_compilations
           uri: lb://event-service
           predicates:
             - Path=/admin/compilations/**,/compilations/**
+            - Method=GET,POST,PATCH,DELETE
 
         - id: event_service_event
           uri: lb://event-service
           predicates:
             - Path=/events/**,/admin/events/**,/users/{userId}/events/**
+            - Method=GET,POST,PATCH
 
         - id: comment_service_admin
           uri: lb://comment-service
           predicates:
             - Path=/admin/comments/**
+            - Method=DELETE
 
         - id: comment_service_private
           uri: lb://comment-service
           predicates:
             - Path=/events/{eventId}/users/{userId}/comment,/users/{userId}/comment/**
+            - Method=GET,POST,PATCH,DELETE
 
         - id: comment_service_public
           uri: lb://comment-service
           predicates:
             - Path=/events/{eventId}/comment,/comment/search
+            - Method=GET
 
         - id: request_service
           uri: lb://request-service
           predicates:
             - Path=/users/{userId}/requests/**
+            - Method=GET,POST,PATCH
 
         - id: user_service
           uri: lb://user-service
           predicates:
             - Path=/admin/users/**
+            - Method=GET,POST,DELETE
 
         - id: default_route
           uri: http://localhost:8080
