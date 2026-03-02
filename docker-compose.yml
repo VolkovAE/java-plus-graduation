@@ -1,17 +1,71 @@
 services:
-  main-db:
+  users-db:
     image: postgres:16.1
-    container_name: main-db
+    container_name: users-db
     ports:
-      - "${MAIN_POSTGRESQL_PORT:-5434}:5432"
+      - "${USERS_POSTGRESQL_PORT:-5435}:5432"
     volumes:
-      - ./db/volumes/postgres/${MAIN_POSTGRESQL_DB:-main}:/var/lib/postgresql/data/
+      - ./db/volumes/postgres/${USERS_POSTGRESQL_DB:-users}:/var/lib/postgresql/data/
     environment:
-      POSTGRES_DB: ${MAIN_POSTGRESQL_DB:-main}
-      POSTGRES_USER: ${MAIN_POSTGRESQL_USER:-dbuserMain}
-      POSTGRES_PASSWORD: ${MAIN_POSTGRESQL_PASSWORD:-12345Main}
+      POSTGRES_DB: ${USERS_POSTGRESQL_DB:-users}
+      POSTGRES_USER: ${USERS_POSTGRESQL_USER:-dbuserUsers}
+      POSTGRES_PASSWORD: ${USERS_POSTGRESQL_PASSWORD:-12345Users}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${MAIN_POSTGRESQL_USER:-dbuserMain} -d ${MAIN_POSTGRESQL_DB:-main}" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${USERS_POSTGRESQL_USER:-dbuserUsers} -d ${USERS_POSTGRESQL_DB:-users}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  requests-db:
+    image: postgres:16.1
+    container_name: requests-db
+    ports:
+      - "${REQUESTS_POSTGRESQL_PORT:-5436}:5432"
+    volumes:
+      - ./db/volumes/postgres/${REQUESTS_POSTGRESQL_DB:-requests}:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${REQUESTS_POSTGRESQL_DB:-requests}
+      POSTGRES_USER: ${REQUESTS_POSTGRESQL_USER:-dbuserRequests}
+      POSTGRES_PASSWORD: ${REQUESTS_POSTGRESQL_PASSWORD:-12345Requests}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${REQUESTS_POSTGRESQL_USER:-dbuserRequests} -d ${REQUESTS_POSTGRESQL_DB:-requests}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  comments-db:
+    image: postgres:16.1
+    container_name: comments-db
+    ports:
+      - "${COMMENTS_POSTGRESQL_PORT:-5437}:5432"
+    volumes:
+      - ./db/volumes/postgres/${COMMENTS_POSTGRESQL_DB:-comments}:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${COMMENTS_POSTGRESQL_DB:-comments}
+      POSTGRES_USER: ${COMMENTS_POSTGRESQL_USER:-dbuserComments}
+      POSTGRES_PASSWORD: ${COMMENTS_POSTGRESQL_PASSWORD:-12345Comments}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${COMMENTS_POSTGRESQL_USER:-dbuserComments} -d ${COMMENTS_POSTGRESQL_DB:-comments}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  events-db:
+    image: postgres:16.1
+    container_name: events-db
+    ports:
+      - "${EVENT_POSTGRESQL_PORT:-5438}:5432"
+    volumes:
+      - ./db/volumes/postgres/${EVENT_POSTGRESQL_DB:-events}:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${EVENT_POSTGRESQL_DB:-events}
+      POSTGRES_USER: ${EVENT_POSTGRESQL_USER:-dbuserEvent}
+      POSTGRES_PASSWORD: ${EVENT_POSTGRESQL_PASSWORD:-12345Event}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${EVENT_POSTGRESQL_USER:-dbuserEvent} -d ${EVENT_POSTGRESQL_DB:-events}" ]
       interval: 5s
       timeout: 5s
       retries: 10

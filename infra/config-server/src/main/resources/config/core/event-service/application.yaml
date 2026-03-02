@@ -1,0 +1,38 @@
+server:
+  port: 0
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+  # DataSource
+  datasource:
+    driver-class-name: ${EVENT_POSTGRESQL_DRIVER:org.postgresql.Driver}
+    url: ${EVENT_POSTGRESQL_URL:jdbc:postgresql://localhost:5438/events}
+    username: ${EVENT_POSTGRESQL_USER:dbuserEvent}
+    password: ${EVENT_POSTGRESQL_PASSWORD:12345Event}
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: update
+  show-sql: true
+  properties:
+    hibernate:
+      format_sql: true
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+logging:
+  level:
+    ru:
+      practicum: INFO
+    org:
+      springframework:
+        orm:
+          jpa: INFO
+          TransactionManager: DEBUG
+          transaction: INFO
+          transaction.interceptor: TRACE
+      Zalando:
+        logbook: TRACE
+# когда создаем бин stats-client используем этот параметр для поиска сервиса stats-server
+discovery:
+  services:
+    stats-server-id: stats-server

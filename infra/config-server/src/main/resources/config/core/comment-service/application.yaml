@@ -1,0 +1,34 @@
+server:
+  port: 0
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+  # DataSource
+  datasource:
+    driver-class-name: ${COMMENTS_POSTGRESQL_DRIVER:org.postgresql.Driver}
+    url: ${COMMENTS_POSTGRESQL_URL:jdbc:postgresql://localhost:5437/comments}
+    username: ${COMMENTS_POSTGRESQL_USER:dbuserComments}
+    password: ${COMMENTS_POSTGRESQL_PASSWORD:12345Comments}
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: update
+  show-sql: true
+  properties:
+    hibernate:
+      format_sql: true
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+logging:
+  level:
+    ru:
+      practicum: INFO
+    org:
+      springframework:
+        orm:
+          jpa: INFO
+          TransactionManager: DEBUG
+          transaction: INFO
+          transaction.interceptor: TRACE
+      Zalando:
+        logbook: TRACE

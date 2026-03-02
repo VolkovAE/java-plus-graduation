@@ -5,45 +5,53 @@ spring:
     gateway:
       discovery.locator.enabled: false
       routes:
-        - id: main_service_categories
-          uri: lb://main-service
+        - id: event_service_categories
+          uri: lb://event-service
           predicates:
             - Path=/admin/categories/**,/categories/**
+            - Method=GET,POST,PATCH,DELETE
 
-        - id: main_service_compilations
-          uri: lb://main-service
+        - id: event_service_compilations
+          uri: lb://event-service
           predicates:
             - Path=/admin/compilations/**,/compilations/**
+            - Method=GET,POST,PATCH,DELETE
 
-        - id: main_service_comment_admin
-          uri: lb://main-service
-          predicates:
-            - Path=/admin/comments/**
-
-        - id: main_service_comment_private
-          uri: lb://main-service
-          predicates:
-            - Path=/events/{eventId}/users/{userId}/comment,/users/{userId}/comment/**
-
-        - id: main_service_comment_public
-          uri: lb://main-service
-          predicates:
-            - Path=/events/{eventId}/comment,/comment/search
-
-        - id: main_service_event
-          uri: lb://main-service
+        - id: event_service_event
+          uri: lb://event-service
           predicates:
             - Path=/events/**,/admin/events/**,/users/{userId}/events/**
+            - Method=GET,POST,PATCH
 
-        - id: main_service_request
-          uri: lb://main-service
+        - id: comment_service_admin
+          uri: lb://comment-service
+          predicates:
+            - Path=/admin/comments/**
+            - Method=DELETE
+
+        - id: comment_service_private
+          uri: lb://comment-service
+          predicates:
+            - Path=/events/{eventId}/users/{userId}/comment,/users/{userId}/comment/**
+            - Method=GET,POST,PATCH,DELETE
+
+        - id: comment_service_public
+          uri: lb://comment-service
+          predicates:
+            - Path=/events/{eventId}/comment,/comment/search
+            - Method=GET
+
+        - id: request_service
+          uri: lb://request-service
           predicates:
             - Path=/users/{userId}/requests/**
+            - Method=GET,POST,PATCH
 
-        - id: main_service_user
-          uri: lb://main-service
+        - id: user_service
+          uri: lb://user-service
           predicates:
             - Path=/admin/users/**
+            - Method=GET,POST,DELETE
 
         - id: default_route
           uri: http://localhost:8080
