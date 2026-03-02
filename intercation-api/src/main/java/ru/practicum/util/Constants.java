@@ -60,4 +60,6 @@ public final class Constants {
     public static final String DEFAULT_VALUE_REQUEST_PARAM_SIZE = "10";
 
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    public static final String BEAN_NAME_PRODUCER_KAFKA_COLLECTOR = "ProducerKafkaCollector";
 }
