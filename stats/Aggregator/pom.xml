@@ -77,6 +77,19 @@
             <artifactId>lombok-mapstruct-binding</artifactId>
         </dependency>
 
+        <!--    Kafka dependencies         -->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.practicum</groupId>
+            <artifactId>avro-schemas</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <!--    / Kafka dependencies         -->
+
         <dependency>
             <groupId>ru.practicum</groupId>
             <artifactId>intercation-api</artifactId>

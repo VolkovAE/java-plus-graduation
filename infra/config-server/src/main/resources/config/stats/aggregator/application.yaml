@@ -11,3 +11,15 @@ logging:
     org:
       Zalando:
         logbook: TRACE
+kafka:
+  aggregator:
+    consumer:
+      host: localhost
+      port: 9092
+      offset: earliest
+      group: aggregator
+      topic: stats.user-actions.v1
+    producer:
+      host: localhost
+      port: 9092
+      topic: stats.events-similarity.v1

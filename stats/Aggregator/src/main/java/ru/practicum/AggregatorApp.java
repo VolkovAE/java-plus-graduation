@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.ConfigurableApplicationContext;
+import ru.practicum.service.AggregationStarter;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
@@ -12,6 +14,13 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 public class AggregatorApp {
     public static void main(String[] args) {
-        SpringApplication.run(AggregatorApp.class, args);
+        // Запуск Spring Boot приложения при помощи вспомогательного класса SpringApplication
+        // метод run возвращает назад настроенный контекст, который мы можем использовать для
+        // получения настроенных бинов
+        ConfigurableApplicationContext context = SpringApplication.run(AggregatorApp.class, args);
+
+        // Получаем бин AggregationStarter из контекста и запускаем основную логику сервиса
+        AggregationStarter aggregator = context.getBean(AggregationStarter.class);
+        aggregator.start();
     }
 }
