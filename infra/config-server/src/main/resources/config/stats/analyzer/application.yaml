@@ -4,10 +4,46 @@ spring:
   output:
     ansi:
       enabled: ALWAYS
+  # DataSource
+  datasource:
+    driver-class-name: ${ANALYZER_POSTGRESQL_DRIVER:org.postgresql.Driver}
+    url: ${ANALYZER_POSTGRESQL_URL:jdbc:postgresql://localhost:5439/analyzer}
+    username: ${ANALYZER_POSTGRESQL_USER:dbuserAnalyzer}
+    password: ${ANALYZER_POSTGRESQL_PASSWORD:12345Analyzer}
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: update
+  show-sql: true
+  properties:
+    hibernate:
+      format_sql: true
+      dialect: org.hibernate.dialect.PostgreSQLDialect
 logging:
   level:
     ru:
       practicum: INFO
     org:
+      springframework:
+        orm:
+          jpa: INFO
+          TransactionManager: DEBUG
+          transaction: INFO
+          transaction.interceptor: TRACE
       Zalando:
         logbook: TRACE
+kafka:
+  analyzer:
+    consumers:
+      user:
+        host: localhost
+        port: 9092
+        offset: earliest
+        group: analyzer-user-group
+        topic: stats.user-actions.v1
+      event:
+        host: localhost
+        port: 9092
+        offset: earliest
+        group: analyzer-event-group
+        topic: stats.events-similarity.v1
