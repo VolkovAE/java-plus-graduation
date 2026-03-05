@@ -54,7 +54,7 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
     private final EventMapper eventMapper;
     private final UserClientComponent userClientComponent;
-    private final StatClient statClient;
+    //private final StatClient statClient;
     private final RequestClient requestClient;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final LocalDateTime EPOCH = LocalDateTime.of(1970, 1, 1, 0, 0);
@@ -128,32 +128,32 @@ public class EventServiceImpl implements EventService {
             viewsMap.put(eventId, 0);
         }
 
-        // Попытка получить статистику, если сервис доступен
-        try {
-            List<String> uris = eventIds.stream()
-                    .map(id -> "/events/" + id)
-                    .collect(Collectors.toList());
-
-            LocalDateTime start = EPOCH;
-            LocalDateTime end = LocalDateTime.now();
-
-            List<ViewStatsDto> stats = statClient.getStats(start, end, uris, true);
-
-            // Обновляем карту просмотров
-            for (ViewStatsDto stat : stats) {
-                try {
-                    Integer eventId = extractEventIdFromUri(stat.getUri());
-                    if (eventId != null) {
-                        viewsMap.put(eventId, stat.getHits());
-                    }
-                } catch (Exception e) {
-                    log.warn("Failed to parse event ID from URI: {}", stat.getUri());
-                }
-            }
-        } catch (Exception ex) {
-            log.warn("Stat service unavailable, using default views (0)");
-            // Оставляем значения по умолчанию (0)
-        }
+//        // Попытка получить статистику, если сервис доступен
+//        try {
+//            List<String> uris = eventIds.stream()
+//                    .map(id -> "/events/" + id)
+//                    .collect(Collectors.toList());
+//
+//            LocalDateTime start = EPOCH;
+//            LocalDateTime end = LocalDateTime.now();
+//
+//            List<ViewStatsDto> stats = statClient.getStats(start, end, uris, true);
+//
+//            // Обновляем карту просмотров
+//            for (ViewStatsDto stat : stats) {
+//                try {
+//                    Integer eventId = extractEventIdFromUri(stat.getUri());
+//                    if (eventId != null) {
+//                        viewsMap.put(eventId, stat.getHits());
+//                    }
+//                } catch (Exception e) {
+//                    log.warn("Failed to parse event ID from URI: {}", stat.getUri());
+//                }
+//            }
+//        } catch (Exception ex) {
+//            log.warn("Stat service unavailable, using default views (0)");
+//            // Оставляем значения по умолчанию (0)
+//        }
 
         return viewsMap;
     }
@@ -169,19 +169,19 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    private int getEventViews(Integer eventId) {
-        try {
-            LocalDateTime start = EPOCH;
-            LocalDateTime end = LocalDateTime.now();
-            List<String> uris = List.of("/events/" + eventId);
-
-            List<ViewStatsDto> stats = statClient.getStats(start, end, uris, false);
-            return stats.stream().mapToInt(ViewStatsDto::getHits).sum();
-        } catch (Exception ex) {
-            log.warn("Failed to fetch views for event {}: {}", eventId, ex.getMessage());
-            return 0;
-        }
-    }
+//    private int getEventViews(Integer eventId) {
+//        try {
+//            LocalDateTime start = EPOCH;
+//            LocalDateTime end = LocalDateTime.now();
+//            List<String> uris = List.of("/events/" + eventId);
+//
+//            List<ViewStatsDto> stats = statClient.getStats(start, end, uris, false);
+//            return stats.stream().mapToInt(ViewStatsDto::getHits).sum();
+//        } catch (Exception ex) {
+//            log.warn("Failed to fetch views for event {}: {}", eventId, ex.getMessage());
+//            return 0;
+//        }
+//    }
 
     @Override
     @Transactional
