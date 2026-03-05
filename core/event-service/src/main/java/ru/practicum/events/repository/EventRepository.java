@@ -24,4 +24,7 @@ public interface EventRepository extends JpaRepository<Event, Integer>, JpaSpeci
     Collection<Event> findByCategory(Category category);
 
     Integer countByCategoryId(Integer categoryId);
+
+    @Query("SELECT ev FROM Event ev WHERE ev.id IN :eventIds")
+    List<Event> findEventsByEventIds(@Param("eventIds") List<Long> eventIds);
 }

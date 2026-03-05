@@ -1,6 +1,7 @@
 package ru.practicum.events.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.events.params.PublicEventParams;
 import ru.practicum.events.service.EventService;
 import ru.practicum.exception.BadRequestException;
+import ru.practicum.exception.ConditionsException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,8 +28,8 @@ public class EventPublicController {
     private final EventService eventService;
 
     @GetMapping("/{eventId}")
-    public EventFullDto getEvent(@PathVariable Integer eventId, HttpServletRequest request) {
-        return eventService.getPublicEventById(eventId, request);
+    public EventFullDto getEvent(@PathVariable Integer eventId, HttpServletRequest request, @RequestHeader("X-EWM-USER-ID") Long userId) {
+        return eventService.getPublicEventById(eventId, request, userId);
     }
 
     @GetMapping
@@ -51,5 +53,15 @@ public class EventPublicController {
         List<EventShortDto> events = eventService.searchPublicEvents(params, request);
         return ResponseEntity.ok(events);
     }
-}
 
+    @GetMapping("/recommendations")
+    public List<EventShortDto> getRecommendationsForUser(@RequestHeader("X-EWM-USER-ID") Integer userId, Integer maxResults) {
+        return eventService.getRecommendationsForUser(userId, maxResults);
+    }
+
+    @PutMapping("/{eventId}/like")
+    @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
+    public void addLikeToEvent(@PathVariable @Positive Integer eventId, @RequestHeader(value = "X-EWM-USER-ID") Integer userId) throws ConditionsException {
+        eventService.addLikeToEvent(userId, eventId);
+    }
+}

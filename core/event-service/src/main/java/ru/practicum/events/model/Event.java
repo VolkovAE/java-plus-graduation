@@ -89,5 +89,6 @@ public class Event {
     private String title;
 
     @Builder.Default
-    private Integer views = 0;
+    //private Integer views = 0;
+    private double rating = 0.0;
 }
