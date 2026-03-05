@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>Analyzer</artifactId>
+    <artifactId>analyzer</artifactId>
 
     <dependencies>
         <dependency>
