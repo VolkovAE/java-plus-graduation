@@ -25,10 +25,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 public class EventPublicController {
+    private static final String nameHeaderUserId = "X-EWM-USER-ID";
+
     private final EventService eventService;
 
     @GetMapping("/{eventId}")
-    public EventFullDto getEvent(@PathVariable Integer eventId, HttpServletRequest request, @RequestHeader("X-EWM-USER-ID") Long userId) {
+    public EventFullDto getEvent(@PathVariable Integer eventId, HttpServletRequest request, @RequestHeader(nameHeaderUserId) Long userId) {
         return eventService.getPublicEventById(eventId, request, userId);
     }
 
@@ -55,13 +57,13 @@ public class EventPublicController {
     }
 
     @GetMapping("/recommendations")
-    public List<EventShortDto> getRecommendationsForUser(@RequestHeader("X-EWM-USER-ID") Integer userId, Integer maxResults) {
+    public List<EventShortDto> getRecommendationsForUser(@RequestHeader(nameHeaderUserId) Integer userId, @RequestParam Integer maxResults) {
         return eventService.getRecommendationsForUser(userId, maxResults);
     }
 
     @PutMapping("/{eventId}/like")
     @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
-    public void addLikeToEvent(@PathVariable @Positive Integer eventId, @RequestHeader(value = "X-EWM-USER-ID") Integer userId) throws ConditionsException {
+    public void addLikeToEvent(@PathVariable @Positive Integer eventId, @RequestHeader(value = nameHeaderUserId) Integer userId) throws ConditionsException {
         eventService.addLikeToEvent(userId, eventId);
     }
 }
