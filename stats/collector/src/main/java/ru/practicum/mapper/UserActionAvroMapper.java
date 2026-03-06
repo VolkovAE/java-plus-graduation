@@ -9,12 +9,12 @@ import ru.practicum.stats.proto.ActionTypeProto;
 import ru.practicum.stats.proto.UserActionProto;
 
 import java.time.Instant;
-import java.util.HashMap;
+import java.util.EnumMap;
 
 @Component
 @Slf4j
 public class UserActionAvroMapper {
-    private static final HashMap<ActionTypeProto, ActionTypeAvro> map = new HashMap<>();
+    private static final EnumMap<ActionTypeProto, ActionTypeAvro> map = new EnumMap<>(ActionTypeProto.class);
 
     static {
         map.put(ActionTypeProto.ACTION_VIEW, ActionTypeAvro.VIEW);
