@@ -245,7 +245,7 @@ public class EventServiceImpl implements EventService {
 
         collectorClient.collectUserAction(userId, Long.valueOf(eventId), ActionTypeProto.ACTION_VIEW);
         Double rating = ratings.get(Long.valueOf(eventId));
-        if (rating != null) rating = 0.0;
+        if (rating == null) rating = 0.0;
         event.setRating(rating);
 
         EventFullDto dto = eventMapper.toEventFullDto(event, userDto);
