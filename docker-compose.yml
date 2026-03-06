@@ -8,10 +8,10 @@ services:
       - ./db/volumes/postgres/${USERS_POSTGRESQL_DB:-users}:/var/lib/postgresql/data/
     environment:
       POSTGRES_DB: ${USERS_POSTGRESQL_DB:-users}
-      POSTGRES_USER: ${USERS_POSTGRESQL_USER:-dbuserUsers}
-      POSTGRES_PASSWORD: ${USERS_POSTGRESQL_PASSWORD:-12345Users}
+      POSTGRES_USER: ${USERS_POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${USERS_POSTGRESQL_PASSWORD}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${USERS_POSTGRESQL_USER:-dbuserUsers} -d ${USERS_POSTGRESQL_DB:-users}" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${USERS_POSTGRESQL_USER} -d ${USERS_POSTGRESQL_DB:-users}" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -26,10 +26,10 @@ services:
       - ./db/volumes/postgres/${REQUESTS_POSTGRESQL_DB:-requests}:/var/lib/postgresql/data/
     environment:
       POSTGRES_DB: ${REQUESTS_POSTGRESQL_DB:-requests}
-      POSTGRES_USER: ${REQUESTS_POSTGRESQL_USER:-dbuserRequests}
-      POSTGRES_PASSWORD: ${REQUESTS_POSTGRESQL_PASSWORD:-12345Requests}
+      POSTGRES_USER: ${REQUESTS_POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${REQUESTS_POSTGRESQL_PASSWORD}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${REQUESTS_POSTGRESQL_USER:-dbuserRequests} -d ${REQUESTS_POSTGRESQL_DB:-requests}" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${REQUESTS_POSTGRESQL_USER} -d ${REQUESTS_POSTGRESQL_DB:-requests}" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -44,10 +44,10 @@ services:
       - ./db/volumes/postgres/${COMMENTS_POSTGRESQL_DB:-comments}:/var/lib/postgresql/data/
     environment:
       POSTGRES_DB: ${COMMENTS_POSTGRESQL_DB:-comments}
-      POSTGRES_USER: ${COMMENTS_POSTGRESQL_USER:-dbuserComments}
-      POSTGRES_PASSWORD: ${COMMENTS_POSTGRESQL_PASSWORD:-12345Comments}
+      POSTGRES_USER: ${COMMENTS_POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${COMMENTS_POSTGRESQL_PASSWORD}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${COMMENTS_POSTGRESQL_USER:-dbuserComments} -d ${COMMENTS_POSTGRESQL_DB:-comments}" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${COMMENTS_POSTGRESQL_USER} -d ${COMMENTS_POSTGRESQL_DB:-comments}" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -62,10 +62,10 @@ services:
       - ./db/volumes/postgres/${EVENT_POSTGRESQL_DB:-events}:/var/lib/postgresql/data/
     environment:
       POSTGRES_DB: ${EVENT_POSTGRESQL_DB:-events}
-      POSTGRES_USER: ${EVENT_POSTGRESQL_USER:-dbuserEvent}
-      POSTGRES_PASSWORD: ${EVENT_POSTGRESQL_PASSWORD:-12345Event}
+      POSTGRES_USER: ${EVENT_POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${EVENT_POSTGRESQL_PASSWORD}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${EVENT_POSTGRESQL_USER:-dbuserEvent} -d ${EVENT_POSTGRESQL_DB:-events}" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${EVENT_POSTGRESQL_USER} -d ${EVENT_POSTGRESQL_DB:-events}" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -80,10 +80,10 @@ services:
       - ./db/volumes/postgres/${STATS_POSTGRESQL_DB:-stats}:/var/lib/postgresql/data/
     environment:
       POSTGRES_DB: ${STATS_POSTGRESQL_DB:-stats}
-      POSTGRES_USER: ${STATS_POSTGRESQL_USER:-dbuserStats}
-      POSTGRES_PASSWORD: ${STATS_POSTGRESQL_PASSWORD:-12345Stats}
+      POSTGRES_USER: ${STATS_POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${STATS_POSTGRESQL_PASSWORD}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${STATS_POSTGRESQL_USER:-dbuserStats} -d ${STATS_POSTGRESQL_DB:-stats}" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${STATS_POSTGRESQL_USER} -d ${STATS_POSTGRESQL_DB:-stats}" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -98,10 +98,10 @@ services:
       - ./db/volumes/postgres/${ANALYZER_POSTGRESQL_DB:-analyzer}:/var/lib/postgresql/data/
     environment:
       POSTGRES_DB: ${ANALYZER_POSTGRESQL_DB:-analyzer}
-      POSTGRES_USER: ${ANALYZER_POSTGRESQL_USER:-dbuserAnalyzer}
-      POSTGRES_PASSWORD: ${ANALYZER_POSTGRESQL_PASSWORD:-12345Analyzer}
+      POSTGRES_USER: ${ANALYZER_POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${ANALYZER_POSTGRESQL_PASSWORD}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${ANALYZER_POSTGRESQL_USER:-dbuserAnalyzer} -d ${ANALYZER_POSTGRESQL_DB:-analyzer}" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${ANALYZER_POSTGRESQL_USER} -d ${ANALYZER_POSTGRESQL_DB:-analyzer}" ]
       interval: 5s
       timeout: 5s
       retries: 10
