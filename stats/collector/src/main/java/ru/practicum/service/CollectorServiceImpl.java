@@ -45,7 +45,7 @@ public class CollectorServiceImpl implements CollectorService {
                 userActionAvro);
 
         Future<RecordMetadata> future = producer.send(record);
-        producer.flush();
+
         try {
             future.get();
         } catch (InterruptedException | ExecutionException e) {
