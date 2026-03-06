@@ -31,8 +31,10 @@ public class BaseAvroDeserializer<T extends SpecificRecordBase> implements Deser
                 return this.reader.read(null, decoder);
             } else
                 throw new SerializationException("Ошибка десериализации данных из топика [" + topic + "]: нет данных.");
-        } catch (Exception e) {
+        } catch (SerializationException e) {
             throw new SerializationException("Ошибка десериализации данных из топика [" + topic + "]", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка десериализации: ", e);
         }
     }
 }
