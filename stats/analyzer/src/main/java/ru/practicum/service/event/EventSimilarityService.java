@@ -28,15 +28,26 @@ public class EventSimilarityService {
             EventSimilarity newEventSimilarity = new EventSimilarity();
             newEventSimilarity.setEventId1(eventId1);
             newEventSimilarity.setEventId2(eventId2);
+            newEventSimilarity.setSimilarity(eventSimilarityAvro.getScore());
+            newEventSimilarity.setTimestamp(eventSimilarityAvro.getTimestamp());
 
-            return newEventSimilarity;
+            return eventSimilarityRepository.save(newEventSimilarity);
         });
 
-        eventSimilarity.setSimilarity(eventSimilarityAvro.getScore());
-        eventSimilarity.setTimestamp(eventSimilarityAvro.getTimestamp());
+        boolean isSave = false;
 
-        EventSimilarity newEventSimilarity = eventSimilarityRepository.save(eventSimilarity);
+        if (!eventSimilarity.getSimilarity().equals(eventSimilarityAvro.getScore())) {
+            isSave = true;
+            eventSimilarity.setSimilarity(eventSimilarityAvro.getScore());
+        }
 
-        log.info("Save EventSimilarity: {}", newEventSimilarity);
+        if (!eventSimilarity.getTimestamp().equals(eventSimilarityAvro.getTimestamp())) {
+            isSave = true;
+            eventSimilarity.setTimestamp(eventSimilarityAvro.getTimestamp());
+        }
+
+        if (isSave) eventSimilarity = eventSimilarityRepository.save(eventSimilarity);
+
+        log.info("Save EventSimilarity: {}", eventSimilarity);
     }
 }
