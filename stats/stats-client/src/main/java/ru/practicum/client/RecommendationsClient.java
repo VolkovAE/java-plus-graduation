@@ -1,6 +1,8 @@
 package ru.practicum.client;
 
+import io.grpc.StatusRuntimeException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Component;
 import ru.practicum.stats.proto.*;
@@ -13,6 +15,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class RecommendationsClient {
     @GrpcClient("analyzer")
@@ -24,7 +27,12 @@ public class RecommendationsClient {
                 .setMaxResults(maxResults)
                 .build();
 
-        Iterator<RecommendedEventProto> iterator = client.getRecommendationsForUser(request);
+        Iterator<RecommendedEventProto> iterator = null;
+        try {
+            iterator = client.getRecommendationsForUser(request);
+        } catch (StatusRuntimeException e) {
+            log.warn("Ошибка при вызове getRecommendationsForUser. \n Код статуса: {} \n Сообщение: {}", e.getStatus(), e.getMessage());
+        }
 
         return asStream(iterator);
     }
@@ -36,7 +44,12 @@ public class RecommendationsClient {
                 .setMaxResults(maxResults)
                 .build();
 
-        Iterator<RecommendedEventProto> iterator = client.getSimilarEvents(request);
+        Iterator<RecommendedEventProto> iterator = null;
+        try {
+            iterator = client.getSimilarEvents(request);
+        } catch (StatusRuntimeException e) {
+            log.warn("Ошибка при вызове getSimilarEvents. \n Код статуса: {} \n Сообщение: {}", e.getStatus(), e.getMessage());
+        }
 
         return asStream(iterator);
     }
@@ -46,7 +59,12 @@ public class RecommendationsClient {
                 .addAllEventId(eventIds)
                 .build();
 
-        Iterator<RecommendedEventProto> iterator = client.getInteractionsCount(request);
+        Iterator<RecommendedEventProto> iterator = null;
+        try {
+            iterator = client.getInteractionsCount(request);
+        } catch (StatusRuntimeException e) {
+            log.warn("Ошибка при вызове getInteractionsCount. \n Код статуса: {} \n Сообщение: {}", e.getStatus(), e.getMessage());
+        }
 
         return asStream(iterator);
     }
