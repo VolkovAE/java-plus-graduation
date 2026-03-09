@@ -3,6 +3,7 @@ package ru.practicum.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.client.CollectorClient;
 import ru.practicum.component.EventClientComponent;
 import ru.practicum.component.UserClientComponent;
 import ru.practicum.dto.event.EventFullDto;
@@ -13,6 +14,7 @@ import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.mapper.RequestMapper;
 import ru.practicum.model.Request;
+import ru.practicum.stats.proto.ActionTypeProto;
 import ru.practicum.storage.RequestRepository;
 
 import java.time.LocalDateTime;
@@ -27,6 +29,7 @@ public class RequestServiceImpl implements RequestService {
     private final EventClientComponent eventClientComponent;
     private final RequestRepository requestRepository;
     private final RequestMapper requestMapper;
+    private final CollectorClient collectorClient;
 
     @Override
     @Transactional
@@ -65,6 +68,8 @@ public class RequestServiceImpl implements RequestService {
         } else {
             request.setStatus(ru.practicum.enums.request.RequestStatus.PENDING);
         }
+
+        collectorClient.collectUserAction(Long.valueOf(userId), Long.valueOf(eventId), ActionTypeProto.ACTION_REGISTER);
 
         return requestMapper.toParticipationRequestDto(requestRepository.save(request));
     }

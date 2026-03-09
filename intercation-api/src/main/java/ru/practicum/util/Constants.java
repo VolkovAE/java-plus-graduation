@@ -60,4 +60,17 @@ public final class Constants {
     public static final String DEFAULT_VALUE_REQUEST_PARAM_SIZE = "10";
 
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    public static final String BEAN_NAME_PRODUCER_KAFKA_COLLECTOR = "ProducerKafkaCollector";
+    public static final String BEAN_NAME_CONSUMER_KAFKA_AGGREGATOR = "ConsumerKafkaAggregator";
+    public static final String BEAN_NAME_PRODUCER_KAFKA_AGGREGATOR = "ProducerKafkaAggregator";
+
+    public static final String BEAN_NAME_CONSUMER_KAFKA_ANALYZER_USER = "ConsumerKafkaAnalyzerUser";
+    public static final String BEAN_NAME_CONSUMER_KAFKA_ANALYZER_EVENT = "ConsumerKafkaAnalyzerEvent";
+
+    public static final Double WEIGHT_VIEW = 0.4;
+    public static final Double WEIGHT_REGISTER = 0.8;
+    public static final Double WEIGHT_LIKE = 1.0;
+
+    public static double E_10 = 1e-10;
 }

@@ -52,4 +52,11 @@ public class RequestClientFallback implements RequestClient {
 
         return null;
     }
+
+    @Override
+    public Boolean checkUserParticipation(Integer userId, Integer eventId) {
+        log.error("Сервис request-service не доступен.");
+
+        return null;
+    }
 }

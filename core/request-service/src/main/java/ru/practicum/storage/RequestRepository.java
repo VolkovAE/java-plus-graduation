@@ -39,4 +39,6 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
     List<Request> findAllByIdIn(List<Integer> ids);
 
     List<Request> findByEventIdAndStatus(Integer eventId, RequestStatus status);
+
+    Boolean existsByRequesterIdAndEventIdAndStatus(Integer requesterId, Integer eventId, RequestStatus status);
 }

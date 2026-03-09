@@ -1,0 +1,21 @@
+server:
+  port: 0
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+logging:
+  level:
+    ru:
+      practicum: INFO
+    org:
+      Zalando:
+        logbook: TRACE
+grpc:
+  server:
+    port: 0 #59091
+kafka:
+  collector:
+    host: localhost
+    port: 9092
+    topic: stats.user-actions.v1

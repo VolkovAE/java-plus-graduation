@@ -46,5 +46,7 @@ public class EventFullDto {
     private String state;
     @NotBlank
     private String title;
-    private Integer views;
+
+    //private Integer views;
+    private Double rating;
 }

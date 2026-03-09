@@ -3,7 +3,6 @@ package ru.practicum.controller;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.client.request.RequestClient;
@@ -13,6 +12,7 @@ import ru.practicum.service.RequestServiceExt;
 import ru.practicum.storage.ConfirmedCount;
 
 import java.util.List;
+import java.util.Map;
 
 import static ru.practicum.util.Constants.*;
 
@@ -62,5 +62,17 @@ public class RequestControllerBox implements RequestClient {
     @PutMapping
     public ParticipationRequestDto update(@RequestBody ParticipationRequestDto participationRequestDto) {
         return requestService.update(participationRequestDto);
+    }
+
+    @RequestMapping(value = "/participation/{userId}/{eventId}")
+    public Boolean checkUserParticipation(@PathVariable Integer userId, @PathVariable Integer eventId) {
+        log.info("Проверить регистрацию пользователя {} на мероприятие {}", userId, eventId);
+        return requestService.checkUserParticipation(userId, eventId);
+    }
+
+    @GetMapping("/count/events/batch")
+    public Map<Integer, Long> getConfirmedRequestsForEvents(@RequestParam List<Integer> eventIds) {
+        log.info("Получить количество принятых заявок по каждому мероприятию из списка {}", eventIds);
+        return requestService.getConfirmedRequestsForEvents(eventIds);
     }
 }

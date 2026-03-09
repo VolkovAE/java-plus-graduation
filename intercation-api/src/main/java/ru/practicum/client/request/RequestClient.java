@@ -31,4 +31,7 @@ public interface RequestClient {
 
     @PutMapping
     ParticipationRequestDto update(@RequestBody ParticipationRequestDto participationRequestDto);
+
+    @RequestMapping(value = "/requests/participation/{userId}/{eventId}")
+    Boolean checkUserParticipation(@PathVariable Integer userId, @PathVariable Integer eventId);
 }

@@ -8,10 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.exception.ConflictException;
-import ru.practicum.exception.DuplicatedDataException;
-import ru.practicum.exception.NotFoundException;
-import ru.practicum.exception.ValidationException;
+import ru.practicum.exception.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -107,6 +104,17 @@ public class ErrorHandlingController {
 
         return api(HttpStatus.CONFLICT,
                 "For the requested operation the conditions are not met.",
+                e.getMessage(),
+                null);
+    }
+
+    @ExceptionHandler(ConditionsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError onConditionsException(ConditionsException e) {
+        log.warn("400 {}", e.getMessage());
+
+        return api(HttpStatus.BAD_REQUEST,
+                "Incorrectly made request.",
                 e.getMessage(),
                 null);
     }

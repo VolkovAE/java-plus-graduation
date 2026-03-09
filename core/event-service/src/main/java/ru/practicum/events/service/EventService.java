@@ -7,6 +7,7 @@ import ru.practicum.dto.request.ParticipationRequestDto;
 import ru.practicum.dto.request.RequestStatusUpdateRequest;
 import ru.practicum.events.params.AdminEventParams;
 import ru.practicum.events.params.PublicEventParams;
+import ru.practicum.exception.ConditionsException;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface EventService {
 
     EventFullDto update(Integer userId, Integer eventId, UpdateEventUserRequest updateEventUserRequest);
 
-    EventFullDto getPublicEventById(Integer eventId, HttpServletRequest request);
+    EventFullDto getPublicEventById(Integer eventId, HttpServletRequest request,  Long userId);
 
     List<EventShortDto> searchPublicEvents(PublicEventParams params, HttpServletRequest request);
 
@@ -30,4 +31,8 @@ public interface EventService {
     EventFullDto findByUserAndEvent(Integer userId, Integer eventId);
 
     List<ParticipationRequestDto> getRequestsByEvent(Integer userId, Integer eventId);
+
+    List<EventShortDto> getRecommendationsForUser(Integer userId, Integer maxResults);
+
+    void addLikeToEvent(Integer userId, Integer eventId) throws ConditionsException;
 }

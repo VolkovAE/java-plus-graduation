@@ -11,7 +11,10 @@ import ru.practicum.storage.ConfirmedCount;
 import ru.practicum.storage.RequestRepository;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static ru.practicum.util.Constants.FORMATTER;
 
@@ -66,5 +69,24 @@ public class RequestServiceExtImpl implements RequestServiceExt {
         Request requestNew = requestRepository.save(requestOld);
 
         return requestMapper.toParticipationRequestDto(requestNew);
+    }
+
+    @Override
+    public Boolean checkUserParticipation(Integer requesterId, Integer eventId) {
+        return requestRepository.existsByRequesterIdAndEventIdAndStatus(requesterId, eventId, RequestStatus.CONFIRMED);
+    }
+
+    @Override
+    public Map<Integer, Long> getConfirmedRequestsForEvents(List<Integer> eventIds) {
+        if (eventIds == null || eventIds.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        List<ConfirmedCount> results = requestRepository.countConfirmedForEventIds(eventIds);
+
+        return results.stream()
+                .collect(Collectors.toMap(
+                        row -> (Integer) (row.getEventId()), // eventId
+                        row -> Long.valueOf(row.getCnt()) // count
+                ));
     }
 }
